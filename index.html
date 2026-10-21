@@ -57,6 +57,9 @@ section.s{padding:110px 24px}
 .look span{position:absolute;left:24px;bottom:20px}
 .flt{display:flex;gap:12px;flex-wrap:wrap;margin:30px 0}
 select,input{height:38px;border:1px solid rgba(0,0,0,.25);background:transparent;padding:0 10px;font:inherit;color:inherit;border-radius:0}
+ .ac{position:relative}.ac input{width:100%}.ac input:disabled{opacity:.5}
+ .acl{display:none;position:absolute;left:0;right:0;top:100%;z-index:20;max-height:240px;overflow:auto;margin:0;padding:0;list-style:none;background:var(--bg);border:1px solid rgba(0,0,0,.25);border-top:0;box-shadow:0 12px 24px rgba(0,0,0,.12)}.acl.on{display:block}
+ .acl li{padding:9px 10px;font-size:13px;line-height:1.3;cursor:pointer;border-top:1px solid rgba(0,0,0,.06)}.acl li:hover,.acl li[aria-selected=true]{background:var(--ink);color:var(--bg)}.acl li.mt{cursor:default;opacity:.6}.acl li.mt:hover{background:none;color:inherit}
 #shop{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
 #shop button{text-align:left;text-transform:none;letter-spacing:0}#shop .ph{aspect-ratio:4/5}
 footer{padding:60px 24px 100px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px}
@@ -108,7 +111,7 @@ section.s{padding:80px 16px}.look{margin:0 -16px}}
 
 <aside class="drawer" id="dr" aria-label="Bag"><div style="display:flex;justify-content:space-between"><b>BAG</b><button id="cx">Close ✕</button></div><div id="ci" style="flex:1;overflow:auto"></div><div id="tot" style="padding:12px 0"></div>
 <button class="add" id="co"><span>ОФОРМИТИ ЗАМОВЛЕННЯ</span><span>→</span></button>
-<form id="of" style="display:none;flex-direction:column;gap:8px;margin-top:12px"><input name="name" placeholder="Ім'я" required autocomplete="name"><input name="phone" type="tel" placeholder="Телефон" required autocomplete="tel"><input name="city" placeholder="Місто" required><input name="np" placeholder="Відділення Нової пошти №" required><input name="note" placeholder="Коментар (необов'язково)"><input name="site" tabindex="-1" autocomplete="off" style="display:none"><button class="add" style="margin-top:4px"><span>НАДІСЛАТИ ЗАМОВЛЕННЯ</span><span>—</span></button></form><p id="cn2" class="mono" style="margin-top:10px;opacity:.7"></p></aside>
+<form id="of" style="display:none;flex-direction:column;gap:8px;margin-top:12px"><input name="name" placeholder="Ім’я" required autocomplete="name"><input name="phone" type="tel" placeholder="Телефон" required autocomplete="tel"><div class="ac"><input name="city" id="npc" placeholder="Місто (почніть вводити)" required autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="npcl"><ul id="npcl" class="acl" role="listbox" aria-label="Міста"></ul></div><div class="ac"><input name="np" id="npw" placeholder="Спочатку оберіть місто" required disabled autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="npwl"><ul id="npwl" class="acl" role="listbox" aria-label="Відділення"></ul></div><input name="note" placeholder="Коментар (необов’язково)"><input name="site" tabindex="-1" autocomplete="off" style="display:none"><button class="add" style="margin-top:4px"><span>НАДІСЛАТИ ЗАМОВЛЕННЯ</span><span>—</span></button></form><p id="cn2" class="mono" style="margin-top:10px;opacity:.7"></p></aside>
 <div class="toast mono" id="ts"></div>
 
 <script>
@@ -199,7 +202,27 @@ $('#tot').innerHTML='<span class="mono">Total (demo)</span> <b>'+fmt(t)+'</b>'}
 $('#co').onclick=()=>{if(!S.cart.length)return $('#cn2').textContent='Кошик порожній';$('#of').style.display='flex';$('#co').style.display='none'};
 $('#of').onsubmit=async e=>{e.preventDefault();const f=Object.fromEntries(new FormData(e.target)),n=$('#cn2');if(f.site)return;
 const items=S.cart.map(c=>{const p=P.find(x=>x.id==c.id);return{name:p.n,sku:`A0001-${p.id}-${c.k.toUpperCase()}`,color:C[c.k][0],size:c.z,qty:c.q,price:p.pr}});
-n.textContent='Надсилаємо…';try{const r=await fetch('/api/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...f,items})});if(!r.ok)throw 0;S.cart=[];save();e.target.reset();e.target.style.display='none';$('#co').style.display='';n.textContent='Замовлення прийнято. Ми зв'яжемося з вами для підтвердження. Оплата на цьому кроці не списується.'}catch(x){n.textContent='Не вдалося надіслати замовлення: сервер замовлень не під'єднано або помилка мережі.'}};
+n.textContent='Надсилаємо…';try{const r=await fetch('/api/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...f,items})});if(!r.ok)throw 0;S.cart=[];save();e.target.reset();e.target.style.display='none';$('#co').style.display='';n.textContent='Замовлення прийнято. Ми зв’яжемося з вами для підтвердження. Оплата на цьому кроці не списується.'}catch(x){n.textContent='Не вдалося надіслати замовлення: сервер замовлень не під’єднано або помилка мережі.'}};
+const NP=(c,p)=>fetch('https://api.novaposhta.ua/v2.0/json/',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({apiKey:'',modelName:'AddressGeneral',calledMethod:c,methodProperties:p})}).then(r=>r.json()).then(j=>j.success?j.data:[]).catch(()=>null);
+const escH=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function ac(inp,list,load,pick,allowEmpty){let t,seq=0,items=[],idx=-1;
+const show=(on)=>{list.classList.toggle('on',on);inp.setAttribute('aria-expanded',on)};
+const render=msg=>{list.innerHTML=msg?`<li class="mt">${msg}</li>`:items.map((x,i)=>`<li role="option" id="${list.id}${i}" data-i="${i}" aria-selected="${i==idx}">${escH(x.label)}</li>`).join('');inp.setAttribute('aria-activedescendant',idx>=0?list.id+idx:'');show(true)};
+const run=()=>{clearTimeout(t);const q=inp.value.trim();if(!q&&!allowEmpty){items=[];return show(false)}render('Пошук…');t=setTimeout(async()=>{const my=++seq,r=await load(q);if(my!=seq)return;items=r||[];idx=-1;render(r==null?'Помилка мережі':items.length?'':'Нічого не знайдено')},250)};
+const choose=i=>{const x=items[i];if(!x)return;inp.value=x.label;inp.setCustomValidity('');show(false);pick(x)};
+inp.addEventListener('input',()=>{inp.setCustomValidity('Оберіть варіант зі списку');run()});
+inp.addEventListener('focus',()=>{if(!inp.value||inp.validationMessage)run()});
+inp.addEventListener('blur',()=>setTimeout(()=>show(false),150));
+list.addEventListener('mousedown',e=>{const li=e.target.closest('li[data-i]');if(li){e.preventDefault();choose(+li.dataset.i)}});
+inp.addEventListener('keydown',e=>{if(!list.classList.contains('on')||!items.length)return;
+if(e.key=='ArrowDown'||e.key=='ArrowUp'){e.preventDefault();idx=(idx+(e.key=='ArrowDown'?1:-1)+items.length)%items.length;render();list.children[idx]?.scrollIntoView({block:'nearest'})}
+else if(e.key=='Enter'&&!e.isComposing&&e.keyCode!=229){if(idx>=0){e.preventDefault();choose(idx)}}
+else if(e.key=='Escape'){e.stopPropagation();show(false)}})}
+let npCity='';const npw=$('#npw');
+ac($('#npc'),$('#npcl'),async q=>{const d=await NP('searchSettlements',{CityName:q,Limit:'20',Page:'1'});return d&&(d[0]?.Addresses||[]).filter(a=>a.Warehouses>0&&a.DeliveryCity).map(a=>({label:a.Present,ref:a.DeliveryCity}))},
+x=>{npCity=x.ref;npw.disabled=false;npw.value='';npw.placeholder='Відділення або поштомат (номер чи вулиця)';npw.setCustomValidity('Оберіть відділення зі списку');npw.focus()});
+$('#npc').addEventListener('input',()=>{npCity='';npw.value='';npw.disabled=true;npw.placeholder='Спочатку оберіть місто'});
+ac(npw,$('#npwl'),async q=>{if(!npCity)return[];const d=await NP('getWarehouses',{CityRef:npCity,FindByString:q,Limit:'50',Page:'1'});return d&&d.map(w=>({label:w.Description}))},()=>{},true);
 $('#bag').onclick=()=>$('#dr').classList.add('on');$('#cx').onclick=()=>$('#dr').classList.remove('on');
 // interaction
 let sx=0,mv=0,down=false,bp=0,lx=0,vv=0;
