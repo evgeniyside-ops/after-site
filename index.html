@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><title>AFTER® — MORE TO COME</title>
+<!DOCTYPE html><html lang="uk"><head><meta charset="utf-8"><title>AFTER® — MORE TO COME</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Space+Mono&display=swap" rel="stylesheet">
@@ -57,6 +57,9 @@ section.s{padding:110px 24px}
 .look span{position:absolute;left:24px;bottom:20px}
 .flt{display:flex;gap:12px;flex-wrap:wrap;margin:30px 0}
 select,input{height:38px;border:1px solid rgba(0,0,0,.25);background:transparent;padding:0 10px;font:inherit;color:inherit;border-radius:0}
+ .ac{position:relative}.ac input{width:100%}.ac input:disabled{opacity:.5}
+ .acl{display:none;position:absolute;left:0;right:0;top:100%;z-index:20;max-height:240px;overflow:auto;margin:0;padding:0;list-style:none;background:var(--bg);border:1px solid rgba(0,0,0,.25);border-top:0;box-shadow:0 12px 24px rgba(0,0,0,.12)}.acl.on{display:block}
+ .acl li{padding:9px 10px;font-size:13px;line-height:1.3;cursor:pointer;border-top:1px solid rgba(0,0,0,.06)}.acl li:hover,.acl li[aria-selected=true]{background:var(--ink);color:var(--bg)}.acl li.mt{cursor:default;opacity:.6}.acl li.mt:hover{background:none;color:inherit}
 #shop{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
 #shop button{text-align:left;text-transform:none;letter-spacing:0}#shop .ph{aspect-ratio:4/5}
 footer{padding:60px 24px 100px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px}
@@ -96,26 +99,26 @@ section.s{padding:80px 16px}.look{margin:0 -16px}}
 
 <section class="s" id="collections"><div class="mono">01 — Collections</div><h2 class="h rv" style="margin-top:14px">A—0001</h2><div class="grid" id="colg"></div></section>
 <section class="s" id="lookbook" style="padding-bottom:0"><div class="mono">02 — Campaign / Lookbook</div>
-<div class="look rv" style="background:#DED7E5;margin-top:30px"><b>MORE</b><span class="mono">Editorial photo slot 01 — заменить кадром кампании</span></div>
+<div class="look rv" style="background:#DED7E5;margin-top:30px"><b>MORE</b><span class="mono">Editorial photo slot 01 — замінити кадром кампанії</span></div>
 <div class="look rv" style="background:#D8DDD4"><b>TO COME</b><span class="mono">Editorial photo slot 02</span></div></section>
 <section class="s" id="shopall"><div class="mono">03 — Shop all</div><div class="flt">
 <input id="fq" placeholder="Search" aria-label="Search"><select id="fc" aria-label="Category"><option value="">Category: all</option></select>
 <select id="fo" aria-label="Color"><option value="">Color: all</option></select><select id="fs" aria-label="Size"><option value="">Size: all</option></select>
 <select id="fr" aria-label="Sort"><option value="">Sort: default</option><option value="a">Price ↑</option><option value="d">Price ↓</option><option value="n">Name</option></select></div><div id="shop"></div></section>
 <section class="s" id="about"><div class="mono">04 — About AFTER®</div><h2 class="h rv" style="margin-top:14px">MORE<br>TO COME.</h2>
-<p class="rv" style="max-width:420px;margin-top:30px">Текст о бренде — слот. История AFTER® будет добавлена из ваших материалов; здесь намеренно ничего не выдумано.</p></section>
-<footer class="mono"><span>AFTER® — A—0001</span><span>Прототип · placeholder-изображения · демо-цены</span></footer>
+<p class="rv" style="max-width:420px;margin-top:30px">Текст про бренд — слот. Історію AFTER® буде додано з ваших матеріалів; тут навмисно нічого не вигадано.</p></section>
+<footer class="mono"><span>AFTER® — A—0001</span><span>Прототип · placeholder-зображення · демо-ціни</span></footer>
 
 <aside class="drawer" id="dr" aria-label="Bag"><div style="display:flex;justify-content:space-between"><b>BAG</b><button id="cx">Close ✕</button></div><div id="ci" style="flex:1;overflow:auto"></div><div id="tot" style="padding:12px 0"></div>
-<button class="add" id="co"><span>ОФОРМИТЬ ЗАКАЗ</span><span>→</span></button>
-<form id="of" style="display:none;flex-direction:column;gap:8px;margin-top:12px"><input name="name" placeholder="Имя" required autocomplete="name"><input name="phone" type="tel" placeholder="Телефон" required autocomplete="tel"><input name="city" placeholder="Город" required><input name="np" placeholder="Отделение Новой почты №" required><input name="note" placeholder="Комментарий (необязательно)"><input name="site" tabindex="-1" autocomplete="off" style="display:none"><button class="add" style="margin-top:4px"><span>ОТПРАВИТЬ ЗАКАЗ</span><span>—</span></button></form><p id="cn2" class="mono" style="margin-top:10px;opacity:.7"></p></aside>
+<button class="add" id="co"><span>ОФОРМИТИ ЗАМОВЛЕННЯ</span><span>→</span></button>
+<form id="of" style="display:none;flex-direction:column;gap:8px;margin-top:12px"><input name="name" placeholder="Ім’я" required autocomplete="name"><input name="phone" type="tel" placeholder="Телефон" required autocomplete="tel"><div class="ac"><input name="city" id="npc" placeholder="Місто (почніть вводити)" required autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="npcl"><ul id="npcl" class="acl" role="listbox" aria-label="Міста"></ul></div><div class="ac"><input name="np" id="npw" placeholder="Спочатку оберіть місто" required disabled autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="npwl"><ul id="npwl" class="acl" role="listbox" aria-label="Відділення"></ul></div><input name="note" placeholder="Коментар (необов’язково)"><input name="site" tabindex="-1" autocomplete="off" style="display:none"><button class="add" style="margin-top:4px"><span>НАДІСЛАТИ ЗАМОВЛЕННЯ</span><span>—</span></button></form><p id="cn2" class="mono" style="margin-top:10px;opacity:.7"></p></aside>
 <div class="toast mono" id="ts"></div>
 
 <script>
 const $=s=>document.querySelector(s),mk=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
 const C={wb:['Washed Black','#2b2a29'],nv:['Deep Navy','#1f2738'],bn:['Bone','#E3DCCD'],ms:['Mineral Shade','#8A9296'],ac:['Ash Cacao','#5b4a42'],sp:['Soft Pink','#E6C7C4']};
 const PAL=Object.keys(C);
-// КАТАЛОГ: для реальных фото добавьте cols:[[key,{front:'url',back:'url',detail:'url'}]] — иначе показывается placeholder
+// КАТАЛОГ: для реальних фото додайте cols:[[key,{front:'url',back:'url',detail:'url'}]] — інакше показується placeholder
 const P=[
 {id:'01',n:'Heavy Hood 01',cat:'Hoodie',bg:'#DCE3ED',pr:120,z:0,cols:['wb','nv','mk','ac','sg','ch']},
 {id:'02',n:'Zip Hood 02',cat:'Zip-hoodie',bg:'#DED7E5',pr:140,z:1,cols:['nv','mk','ac','sk','wb','ic']},
@@ -155,10 +158,10 @@ function setImg(el,p,k,side,instant){const[a,b]=el.querySelectorAll('.l');const 
 nx.src=src(p,k,side);fb(nx,p,k,side);nx.style.opacity=1;cur.style.opacity=0}
 P.forEach((p,i)=>{const el=mk('div','it','<img class="l" alt=""><img class="l" alt="" style="opacity:0">');el.setAttribute('role','button');el.tabIndex=-1;el.setAttribute('aria-label',p.n);
 el.querySelector('.l').src=src(p,S.col[p.id],'front');el.querySelector('.l').alt=p.n+' (demo)';stage.append(el);els.push(el)});
-// КРУГОВАЯ КАРУСЕЛЬ: вещи едут по эллипсу, t — цель (целое), pos — текущая позиция (пружина), o — раскрытие карточки (0..1)
+// КРУГОВА КАРУСЕЛЬ: речі їдуть по еліпсу, t — ціль (ціле), pos — поточна позиція (пружина), o — розкриття картки (0..1)
 const RM=matchMedia('(prefers-reduced-motion:reduce)').matches,mod=(n,m)=>((n%m)+m)%m,wr=d=>mod(d+P.length/2,P.length)-P.length/2;
 Object.assign(S,{t:0,pos:0,vel:0,o:0,ot:0,drag:false,sh:-1});let run=0;
-// V — сколько вещей видно на эллипсе одновременно; остальные скрыты и выезжают по мере прокрутки
+// V — скільки речей видно на еліпсі одночасно; решта приховані й виїжджають під час прокручування
 function draw(){const N=P.length,V=Math.min(N,8),W=innerWidth,H=innerHeight,m=M(),o=S.o;
 els.forEach((el,i)=>{const d=wr(i-S.pos),th=d*2*Math.PI/V,c=Math.cos(th),sn=Math.sin(th),k=(c+1)/2,w0=el.offsetWidth,Rx=w0*(m?.95:1.2),Ry=H*(m?.06:.09),vis=N>V?Math.min(1,Math.max(0,V/2-Math.abs(d))):1;
 let x=sn*Rx,y=-(1-c)*Ry*1.1,s=.6+.4*k,op=(.5+.5*k)*vis,r=sn*5;const near=Math.max(0,1-Math.abs(d)),w=near*o;
@@ -179,15 +182,15 @@ pl.innerHTML=`<div class="mono">A—0001 · ${p.cat}</div><h1>${p.n}</h1><div cl
 <div class="row"><span class="mono">View</span><div class="seg"><button aria-pressed="${S.side=='front'}" data-v="front">Front</button><button aria-pressed="${S.side=='back'}" data-v="back">Back</button></div></div>
 <div class="row"><span class="mono">Size</span><div class="sz" id="sz"></div><div class="mono" id="av" style="margin-top:8px;opacity:.7"></div></div>
 <button class="add" id="ad"><span>ADD TO BAG</span><span>${fmt(p.pr)}</span></button>
-<div class="row"><details open><summary class="mono">Description</summary><p>Описание — слот. Реальные характеристики будут добавлены из каталога.</p></details>
-<details><summary class="mono">Composition</summary><p>Состав — не указан (TBD).</p></details>
-<details><summary class="mono">Size guide</summary><table><tr><td>Size</td><td>Chest</td><td>Length</td></tr><tr><td>XS–XXL</td><td>—</td><td>—</td></tr></table><p>Размерная сетка будет добавлена.</p></details></div>
+<div class="row"><details open><summary class="mono">Description</summary><p>Опис — слот. Реальні характеристики буде додано з каталогу.</p></details>
+<details><summary class="mono">Composition</summary><p>Склад — не вказано (TBD).</p></details>
+<details><summary class="mono">Size guide</summary><table><tr><td>Size</td><td>Chest</td><td>Length</td></tr><tr><td>XS–XXL</td><td>—</td><td>—</td></tr></table><p>Розмірну сітку буде додано.</p></details></div>
 <div class="dt"><div class="mono">Print detail<br>asset slot</div><div class="mono">Fabric detail<br>asset slot</div></div>`;
 const sw=$('#sw');p.cols.forEach(c=>{const kk=Array.isArray(c)?c[0]:c,b=mk('button');b.style.background=C[kk][1];b.setAttribute('aria-label',C[kk][0]);b.setAttribute('aria-pressed',kk==k);b.onclick=()=>{S.col[p.id]=kk;setImg(els[S.a],p,kk,S.side);panel()};sw.append(b)});
 const sz=$('#sz');p.sizes.forEach(z=>{const b=mk('button','',z),o=p.out.includes(z);b.disabled=o;b.setAttribute('aria-pressed',S.size==z);b.onclick=()=>{S.size=z;panel()};sz.append(b)});
 $('#av').textContent=p.out.length?'Sold out (demo): '+p.out.join(', '):'All sizes in stock (demo)';
 pl.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{S.side=b.dataset.v;setImg(els[S.a],p,k,S.side);panel()});
-$('#ad').onclick=()=>{if(!S.size)return toast('Выберите размер');add(p.id,k,S.size);toast('Added to bag')}}
+$('#ad').onclick=()=>{if(!S.size)return toast('Оберіть розмір');add(p.id,k,S.size);toast('Added to bag')}}
 function toast(t){const e=$('#ts');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),1800)}
 function save(){try{localStorage.setItem('after.cart',JSON.stringify(S.cart))}catch(e){}$('#cnt').textContent=S.cart.reduce((a,c)=>a+c.q,0);cart()}
 function add(id,k,z){const f=S.cart.find(c=>c.id==id&&c.k==k&&c.z==z);f?f.q++:S.cart.push({id,k,z,q:1});save();$('#dr').classList.add('on')}
@@ -196,10 +199,30 @@ S.cart.forEach((c,i)=>{const p=P.find(x=>x.id==c.id);t+=p.pr*c.q;const r=mk('div
 r.querySelector('img').src=svg(C[c.k][1],'front',p.z);const b=r.querySelectorAll('button');
 b[0].onclick=()=>{c.q>1?c.q--:S.cart.splice(i,1);save()};b[1].onclick=()=>{c.q++;save()};b[2].onclick=()=>{S.cart.splice(i,1);save()};w.append(r)});
 $('#tot').innerHTML='<span class="mono">Total (demo)</span> <b>'+fmt(t)+'</b>'}
-$('#co').onclick=()=>{if(!S.cart.length)return $('#cn2').textContent='Корзина пуста';$('#of').style.display='flex';$('#co').style.display='none'};
+$('#co').onclick=()=>{if(!S.cart.length)return $('#cn2').textContent='Кошик порожній';$('#of').style.display='flex';$('#co').style.display='none'};
 $('#of').onsubmit=async e=>{e.preventDefault();const f=Object.fromEntries(new FormData(e.target)),n=$('#cn2');if(f.site)return;
 const items=S.cart.map(c=>{const p=P.find(x=>x.id==c.id);return{name:p.n,sku:`A0001-${p.id}-${c.k.toUpperCase()}`,color:C[c.k][0],size:c.z,qty:c.q,price:p.pr}});
-n.textContent='Отправляем…';try{const r=await fetch('/api/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...f,items})});if(!r.ok)throw 0;S.cart=[];save();e.target.reset();e.target.style.display='none';$('#co').style.display='';n.textContent='Заказ принят. Мы свяжемся с вами для подтверждения. Оплата на этом шаге не списывается.'}catch(x){n.textContent='Не удалось отправить заказ: сервер заказов не подключён или ошибка сети.'}};
+n.textContent='Надсилаємо…';try{const r=await fetch('/api/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...f,items})});if(!r.ok)throw 0;S.cart=[];save();e.target.reset();e.target.style.display='none';$('#co').style.display='';n.textContent='Замовлення прийнято. Ми зв’яжемося з вами для підтвердження. Оплата на цьому кроці не списується.'}catch(x){n.textContent='Не вдалося надіслати замовлення: сервер замовлень не під’єднано або помилка мережі.'}};
+const NP=(c,p)=>fetch('https://api.novaposhta.ua/v2.0/json/',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({apiKey:'',modelName:'AddressGeneral',calledMethod:c,methodProperties:p})}).then(r=>r.json()).then(j=>j.success?j.data:[]).catch(()=>null);
+const escH=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function ac(inp,list,load,pick,allowEmpty){let t,seq=0,items=[],idx=-1;
+const show=(on)=>{list.classList.toggle('on',on);inp.setAttribute('aria-expanded',on)};
+const render=msg=>{list.innerHTML=msg?`<li class="mt">${msg}</li>`:items.map((x,i)=>`<li role="option" id="${list.id}${i}" data-i="${i}" aria-selected="${i==idx}">${escH(x.label)}</li>`).join('');inp.setAttribute('aria-activedescendant',idx>=0?list.id+idx:'');show(true)};
+const run=()=>{clearTimeout(t);const q=inp.value.trim();if(!q&&!allowEmpty){items=[];return show(false)}render('Пошук…');t=setTimeout(async()=>{const my=++seq,r=await load(q);if(my!=seq)return;items=r||[];idx=-1;render(r==null?'Помилка мережі':items.length?'':'Нічого не знайдено')},250)};
+const choose=i=>{const x=items[i];if(!x)return;inp.value=x.label;inp.setCustomValidity('');show(false);pick(x)};
+inp.addEventListener('input',()=>{inp.setCustomValidity('Оберіть варіант зі списку');run()});
+inp.addEventListener('focus',()=>{if(!inp.value||inp.validationMessage)run()});
+inp.addEventListener('blur',()=>setTimeout(()=>show(false),150));
+list.addEventListener('mousedown',e=>{const li=e.target.closest('li[data-i]');if(li){e.preventDefault();choose(+li.dataset.i)}});
+inp.addEventListener('keydown',e=>{if(!list.classList.contains('on')||!items.length)return;
+if(e.key=='ArrowDown'||e.key=='ArrowUp'){e.preventDefault();idx=(idx+(e.key=='ArrowDown'?1:-1)+items.length)%items.length;render();list.children[idx]?.scrollIntoView({block:'nearest'})}
+else if(e.key=='Enter'&&!e.isComposing&&e.keyCode!=229){if(idx>=0){e.preventDefault();choose(idx)}}
+else if(e.key=='Escape'){e.stopPropagation();show(false)}})}
+let npCity='';const npw=$('#npw');
+ac($('#npc'),$('#npcl'),async q=>{const d=await NP('searchSettlements',{CityName:q,Limit:'20',Page:'1'});return d&&(d[0]?.Addresses||[]).filter(a=>a.Warehouses>0&&a.DeliveryCity).map(a=>({label:a.Present,ref:a.DeliveryCity}))},
+x=>{npCity=x.ref;npw.disabled=false;npw.value='';npw.placeholder='Відділення або поштомат (номер чи вулиця)';npw.setCustomValidity('Оберіть відділення зі списку');npw.focus()});
+$('#npc').addEventListener('input',()=>{npCity='';npw.value='';npw.disabled=true;npw.placeholder='Спочатку оберіть місто'});
+ac(npw,$('#npwl'),async q=>{if(!npCity)return[];const d=await NP('getWarehouses',{CityRef:npCity,FindByString:q,Limit:'50',Page:'1'});return d&&d.map(w=>({label:w.Description}))},()=>{},true);
 $('#bag').onclick=()=>$('#dr').classList.add('on');$('#cx').onclick=()=>$('#dr').classList.remove('on');
 // interaction
 let sx=0,mv=0,down=false,bp=0,lx=0,vv=0;
@@ -212,8 +235,9 @@ $('#ex').onclick=()=>open(true);$('#bk').onclick=()=>open(false);
 [['#pv',-1],['#nx',1],['#pv2',-1],['#nx2',1]].forEach(([s,d])=>$(s).onclick=()=>go(S.t+d));
 addEventListener('keydown',e=>{if(/INPUT|SELECT/.test(document.activeElement.tagName))return;if(e.key=='ArrowRight')go(S.t+1);if(e.key=='ArrowLeft')go(S.t-1);if(e.key=='Escape'){open(false);$('#dr').classList.remove('on');$('#ov').classList.remove('on')}});
 addEventListener('resize',render);
-$('#menu').onclick=()=>{const o=$('#ov').classList.toggle('on');$('#menu').setAttribute('aria-expanded',o)};$('#ov').onclick=()=>$('#ov').classList.remove('on');
-$('#acc').onclick=()=>toast('Account — не реализован в демо');$('#srch').onclick=()=>{open(false);$('#shopall').scrollIntoView();setTimeout(()=>$('#fq').focus(),600)};
+$('#menu').onclick=()=>{const o=$('#ov').classList.toggle('on');$('#menu').setAttribute('aria-expanded',o)};$('#ov').onclick=()=>{$('#ov').classList.remove('on');$('#menu').setAttribute('aria-expanded',false)};
+document.querySelectorAll('#ov a').forEach(a=>a.addEventListener('click',e=>{const wasOpen=S.open;if(wasOpen)open(false);if(wasOpen&&a.hash=='#collections'){e.preventDefault();scrollTo({top:0,behavior:RM?'auto':'smooth'})}}));
+$('#acc').onclick=()=>toast('Account — не реалізовано в демо');$('#srch').onclick=()=>{open(false);$('#shopall').scrollIntoView();setTimeout(()=>$('#fq').focus(),600)};
 // collections
 const cl=[['span 5','#DCE3ED',0,'Washed Black / Navy','4/5'],['span 4','#DED7E5',1,'Zip series','3/4'],['span 3','#D8DDD4',2,'Sage','2/3'],['span 7','#C6B8AC',3,'Ash Cacao','16/10'],['span 5','#F3F0EA',4,'Bone','4/3']];
 cl.forEach(([s,b,i,t,ar])=>{const f=mk('div','ph rv',`<span class="mono">${t} · photo slot</span><img alt="">`);f.style.cssText=`grid-column:${s};background:${b};aspect-ratio:${ar};${i%2?'margin-top:40px':''}`;const p=P[i];f.querySelector('img').src=svg(C[p.cols[0]][1],i%2?'back':'front',p.z);$('#colg').append(f)});
