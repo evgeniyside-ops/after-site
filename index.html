@@ -29,6 +29,8 @@ header nav{display:flex;gap:18px}header nav:last-child{justify-content:flex-end}
 .explore{border-bottom:1px solid;padding-bottom:1px}
 .panel{position:absolute;right:6vw;top:50%;width:min(400px,36vw);transform:translate(40px,-50%);opacity:0;pointer-events:none;transition:opacity .6s .35s,transform .9s .2s var(--e);z-index:50}
 .open .panel{opacity:1;transform:translate(0,-50%);pointer-events:auto}
+.panel{display:flex;flex-direction:column}.pi{display:contents}.panel .add{order:1}.pi>.lt{order:2}
+@keyframes fl{0%,100%{translate:0 0}50%{translate:0 -10px}}.open .it .l{animation:fl 4.5s ease-in-out infinite}
 .panel h1{font:700 34px/1 'Archivo';font-stretch:112%;letter-spacing:-.03em;margin:8px 0}
 .row{margin-top:18px}.row>.mono{display:block;margin-bottom:8px}
 .sw{display:flex;gap:10px}.sw button{width:28px;height:28px;border-radius:50%;border:1px solid rgba(0,0,0,.25);box-shadow:inset 0 0 0 3px var(--bg);transition:transform .3s}
@@ -70,15 +72,18 @@ footer{padding:60px 24px 100px;display:flex;justify-content:space-between;flex-w
 .q{display:inline-flex;align-items:center;gap:8px;margin-top:6px}.q button{width:24px;height:24px;border:1px solid rgba(0,0,0,.3)}
 .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,80px);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:20px;z-index:600;transition:transform .5s var(--e)}.toast.on{transform:translate(-50%,0)}
 @media(max-width:760px){
-header{padding:14px 16px}header nav button:not(.keep){display:none}.logo{font-size:22px}
+header{padding:14px 16px;transition:background .35s,box-shadow .35s}header nav button:not(.keep){display:none}.logo{font-size:22px}
+.sc:not(.lock) header{background:var(--bg);box-shadow:0 1px 0 rgba(0,0,0,.08)}
 .it{width:62vw;top:40%}.open .it{top:40%}
 .tl,.tr{display:none}
-.panel{left:0;right:0;top:auto;bottom:0;width:auto;height:52%;overflow:auto;padding:16px 20px 90px;transform:translateY(100%);background:var(--pb,var(--bg));border-radius:22px 22px 0 0}
+.panel{left:0;right:0;top:auto;bottom:0;width:auto;height:52%;overflow:hidden;padding:0;transform:translateY(100%);background:var(--pb,var(--bg));border-radius:22px 22px 0 0}
+.pi{display:block;flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:16px 20px 12px}
+.panel .add{flex:none;width:auto;margin:8px 20px calc(14px + env(safe-area-inset-bottom,0px))}
 .open .panel{transform:none}.panel h1{font-size:26px}
-.add{position:sticky;bottom:0}.back{left:16px;top:66px;bottom:auto}.nav2{display:none}
+.back{left:16px;top:66px;bottom:auto}.nav2{display:none}
 .cap h2{font-size:21px}.ctl{gap:14px}.grid>*{grid-column:span 12!important}
 section.s{padding:80px 16px}.look{margin:0 -16px}}
-@media(prefers-reduced-motion:reduce){*{transition-duration:.01s!important;scroll-behavior:auto!important}.rv{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){*{transition-duration:.01s!important;scroll-behavior:auto!important}.rv{opacity:1;transform:none}.open .it .l{animation:none}}
 </style></head><body>
 <header><nav><button class="keep" id="menu" aria-expanded="false">Menu / Collections</button></nav>
 <a class="logo" href="#" style="color:inherit;text-decoration:none" aria-label="AFTER®">AFTER<sup>®</sup></a>
@@ -165,7 +170,7 @@ Object.assign(S,{t:0,pos:0,vel:0,o:0,ot:0,drag:false,sh:-1});let run=0;
 function draw(){const N=P.length,V=Math.min(N,8),W=innerWidth,H=innerHeight,m=M(),o=S.o;
 els.forEach((el,i)=>{const d=wr(i-S.pos),th=d*2*Math.PI/V,c=Math.cos(th),sn=Math.sin(th),k=(c+1)/2,w0=el.offsetWidth,Rx=w0*(m?.95:1.2),Ry=H*(m?.06:.09),vis=N>V?Math.min(1,Math.max(0,V/2-Math.abs(d))):1;
 let x=sn*Rx,y=-(1-c)*Ry*1.1,s=.6+.4*k,op=(.5+.5*k)*vis,r=sn*5;const near=Math.max(0,1-Math.abs(d)),w=near*o;
-x+=((m?0:-W*.2)-x)*w;y+=((m?-H*.05:0)-y)*w;s+=((m?1.05:1.35)-s)*w;r*=1-w;op=op*(1-o)+o*near;
+x+=((m?0:-W*.2)-x)*w;y+=((m?-H*.08:0)-y)*w;s+=((m?.92:1.35)-s)*w;r*=1-w;op=op*(1-o)+o*near;
 el.style.transform=`translate(-50%,-50%) translate(${x}px,${y}px) rotate(${r}deg) scale(${s})`;el.style.opacity=op;el.style.zIndex=Math.round(c*50+50);
 el.style.pointerEvents=(S.open&&near<.5)||vis<.05?'none':'auto';el.style.visibility=vis<.01&&near==0?'hidden':'';el.tabIndex=i==S.a?0:-1});
 const ra=mod(Math.round(S.pos),N);if(ra!==S.sh){S.sh=ra;const p=P[ra];$('#hero').style.background=p.bg;$('#cn').textContent=p.n;$('#cm').textContent=`A—0001 · ${p.cat} · ${p.cols.length} colours`;
@@ -177,15 +182,15 @@ function go(n){S.t=n;S.a=mod(n,P.length);S.side='front';S.size=null;if(S.open)pa
 function open(v){S.open=v;S.ot=v?1:0;$('#hero').classList.toggle('open',v);document.body.classList.toggle('lock',v);if(v){scrollTo(0,0);panel()}render()}
 const fmt=n=>n+' ₴';
 function panel(){const p=P[S.a],k=S.col[p.id],pl=$('#panel');pl.style.setProperty('--pb',p.bg);
-pl.innerHTML=`<div class="mono">A—0001 · ${p.cat}</div><h1>${p.n}</h1><div class="mono">${fmt(p.pr)} · demo price</div>
+pl.innerHTML=`<div class="pi"><div class="mono">A—0001 · ${p.cat}</div><h1>${p.n}</h1><div class="mono">${fmt(p.pr)} · demo price</div>
 <div class="row"><span class="mono">Colour — <b>${C[k][0]}</b> · SKU A0001-${p.id}-${k.toUpperCase()}</span><div class="sw" id="sw"></div></div>
 <div class="row"><span class="mono">View</span><div class="seg"><button aria-pressed="${S.side=='front'}" data-v="front">Front</button><button aria-pressed="${S.side=='back'}" data-v="back">Back</button></div></div>
 <div class="row"><span class="mono">Size</span><div class="sz" id="sz"></div><div class="mono" id="av" style="margin-top:8px;opacity:.7"></div></div>
-<button class="add" id="ad"><span>ADD TO BAG</span><span>${fmt(p.pr)}</span></button>
-<div class="row"><details open><summary class="mono">Description</summary><p>Опис — слот. Реальні характеристики буде додано з каталогу.</p></details>
+<div class="row lt"><details open><summary class="mono">Description</summary><p>Опис — слот. Реальні характеристики буде додано з каталогу.</p></details>
 <details><summary class="mono">Composition</summary><p>Склад — не вказано (TBD).</p></details>
 <details><summary class="mono">Size guide</summary><table><tr><td>Size</td><td>Chest</td><td>Length</td></tr><tr><td>XS–XXL</td><td>—</td><td>—</td></tr></table><p>Розмірну сітку буде додано.</p></details></div>
-<div class="dt"><div class="mono">Print detail<br>asset slot</div><div class="mono">Fabric detail<br>asset slot</div></div>`;
+<div class="dt lt"><div class="mono">Print detail<br>asset slot</div><div class="mono">Fabric detail<br>asset slot</div></div></div>
+<button class="add" id="ad"><span>ADD TO BAG</span><span>${fmt(p.pr)}</span></button>`;
 const sw=$('#sw');p.cols.forEach(c=>{const kk=Array.isArray(c)?c[0]:c,b=mk('button');b.style.background=C[kk][1];b.setAttribute('aria-label',C[kk][0]);b.setAttribute('aria-pressed',kk==k);b.onclick=()=>{S.col[p.id]=kk;setImg(els[S.a],p,kk,S.side);panel()};sw.append(b)});
 const sz=$('#sz');p.sizes.forEach(z=>{const b=mk('button','',z),o=p.out.includes(z);b.disabled=o;b.setAttribute('aria-pressed',S.size==z);b.onclick=()=>{S.size=z;panel()};sz.append(b)});
 $('#av').textContent=p.out.length?'Sold out (demo): '+p.out.join(', '):'All sizes in stock (demo)';
@@ -226,15 +231,16 @@ ac(npw,$('#npwl'),async q=>{if(!npCity)return[];const d=await NP('getWarehouses'
 $('#bag').onclick=()=>$('#dr').classList.add('on');$('#cx').onclick=()=>$('#dr').classList.remove('on');
 // interaction
 let sx=0,mv=0,down=false,bp=0,lx=0,vv=0;
-$('#hero').addEventListener('pointerdown',e=>{if(S.open||e.target.closest('button,.panel'))return;down=true;S.drag=true;sx=lx=e.clientX;mv=0;bp=S.pos;vv=0;S.vel=0});
+$('#hero').addEventListener('pointerdown',e=>{if(e.target.closest('button,.panel'))return;down=true;S.drag=true;sx=lx=e.clientX;mv=0;bp=S.pos;vv=0;S.vel=0});
 addEventListener('pointermove',e=>{if(!down)return;mv=e.clientX-sx;const sp=els[0].offsetWidth*.9;vv=vv*.6+(e.clientX-lx)/sp*.4;lx=e.clientX;S.pos=bp-mv/sp;render()});
 ['pointerup','pointercancel'].forEach(ev=>addEventListener(ev,()=>{if(!down)return;down=false;S.drag=false;Math.abs(mv)>6?go(Math.round(S.pos-vv*8)):render()}));
 let wa=0;$('#hero').addEventListener('wheel',e=>{if(S.open||Math.abs(e.deltaX)<Math.abs(e.deltaY))return;e.preventDefault();wa+=e.deltaX;if(Math.abs(wa)>60){go(S.t+(wa>0?1:-1));wa=0}},{passive:false});
-els.forEach((el,i)=>{el.onclick=()=>{if(Math.abs(mv)>6)return;if(S.open)return;i==S.a?open(true):go(S.t+Math.round(wr(i-S.t)))};el.onkeydown=e=>{if(e.key=='Enter'||e.key==' '){e.preventDefault();open(true)}}});
+els.forEach((el,i)=>{el.onclick=()=>{if(Math.abs(mv)>6)return;if(S.open){if(i==S.a){const p=P[i];S.side=S.side=='front'?'back':'front';setImg(el,p,S.col[p.id],S.side);panel()}return}i==S.a?open(true):go(S.t+Math.round(wr(i-S.t)))};el.onkeydown=e=>{if(e.key=='Enter'||e.key==' '){e.preventDefault();open(true)}}});
 $('#ex').onclick=()=>open(true);$('#bk').onclick=()=>open(false);
 [['#pv',-1],['#nx',1],['#pv2',-1],['#nx2',1]].forEach(([s,d])=>$(s).onclick=()=>go(S.t+d));
 addEventListener('keydown',e=>{if(/INPUT|SELECT/.test(document.activeElement.tagName))return;if(e.key=='ArrowRight')go(S.t+1);if(e.key=='ArrowLeft')go(S.t-1);if(e.key=='Escape'){open(false);$('#dr').classList.remove('on');$('#ov').classList.remove('on')}});
 addEventListener('resize',render);
+const onScroll=()=>document.body.classList.toggle('sc',scrollY>8);addEventListener('scroll',onScroll,{passive:true});onScroll();
 $('#menu').onclick=()=>{const o=$('#ov').classList.toggle('on');$('#menu').setAttribute('aria-expanded',o)};$('#ov').onclick=()=>{$('#ov').classList.remove('on');$('#menu').setAttribute('aria-expanded',false)};
 document.querySelectorAll('#ov a').forEach(a=>a.addEventListener('click',e=>{const wasOpen=S.open;if(wasOpen)open(false);if(wasOpen&&a.hash=='#collections'){e.preventDefault();scrollTo({top:0,behavior:RM?'auto':'smooth'})}}));
 $('#acc').onclick=()=>toast('Account — не реалізовано в демо');$('#srch').onclick=()=>{open(false);$('#shopall').scrollIntoView();setTimeout(()=>$('#fq').focus(),600)};
