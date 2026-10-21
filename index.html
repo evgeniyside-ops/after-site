@@ -113,15 +113,31 @@ section.s{padding:80px 16px}.look{margin:0 -16px}}
 
 <script>
 const $=s=>document.querySelector(s),mk=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
-const C={wb:['Washed Black','#2a2a2c'],nv:['Deep Navy','#1e2a4a'],mk:['Milk','#ECE6DA'],ac:['Ash Cacao','#5b4a42'],sg:['Sage Grey','#8d9686'],cb:['Cobalt','#4355C5']};
+const C={wb:['Washed Black','#2b2a29'],nv:['Deep Navy','#1f2738'],bn:['Bone','#E3DCCD'],ms:['Mineral Shade','#8A9296'],ac:['Ash Cacao','#5b4a42'],sp:['Soft Pink','#E6C7C4']};
+const PAL=Object.keys(C);
 // КАТАЛОГ: для реальных фото добавьте cols:[[key,{front:'url',back:'url',detail:'url'}]] — иначе показывается placeholder
 const P=[
-{id:'01',n:'Heavy Hood 01',cat:'Hoodie',bg:'#DCE3ED',pr:120,z:0,cols:['wb','nv','mk','ac','sg']},
-{id:'02',n:'Zip Hood 02',cat:'Zip-hoodie',bg:'#DED7E5',pr:140,z:1,cols:['nv','mk','ac']},
-{id:'03',n:'Heavy Hood 03',cat:'Hoodie',bg:'#D8DDD4',pr:120,z:0,cols:['sg','wb','mk']},
-{id:'04',n:'Zip Hood 04',cat:'Zip-hoodie',bg:'#C6B8AC',pr:150,z:1,cols:['ac','wb','cb']},
-{id:'05',n:'Heavy Hood 05',cat:'Hoodie',bg:'#F3F0EA',pr:130,z:0,cols:['mk','nv','cb','sg']}];
-P.forEach(p=>{p.sizes=['XS','S','M','L','XL','XXL'];p.out=p.id=='04'?['XS','XXL']:p.id=='02'?['XXL']:[]});
+{id:'01',n:'Heavy Hood 01',cat:'Hoodie',bg:'#DCE3ED',pr:120,z:0,cols:['wb','nv','mk','ac','sg','ch']},
+{id:'02',n:'Zip Hood 02',cat:'Zip-hoodie',bg:'#DED7E5',pr:140,z:1,cols:['nv','mk','ac','sk','wb','ic']},
+{id:'03',n:'Heavy Hood 03',cat:'Hoodie',bg:'#D8DDD4',pr:120,z:0,cols:['sg','wb','mk','fo','ol','st']},
+{id:'04',n:'Zip Hood 04',cat:'Zip-hoodie',bg:'#C6B8AC',pr:150,z:1,cols:['ac','wb','cb','mo','rs','sa']},
+{id:'05',n:'Heavy Hood 05',cat:'Hoodie',bg:'#F3F0EA',pr:130,z:0,cols:['mk','nv','cb','sg','ln','ic']},
+{id:'06',n:'Heavy Hood 06',cat:'Hoodie',bg:'#E4DCCF',pr:130,z:0,cols:['ch','st','mk','fo','rs','wb']},
+{id:'07',n:'Zip Hood 07',cat:'Zip-hoodie',bg:'#D5DDE6',pr:145,z:1,cols:['nv','sk','ic','wb','cb','ch']},
+{id:'08',n:'Heavy Hood 08',cat:'Hoodie',bg:'#E2D9E8',pr:125,z:0,cols:['ln','mk','bu','wb','ic','sg']},
+{id:'09',n:'Zip Hood 09',cat:'Zip-hoodie',bg:'#D9D4C4',pr:150,z:1,cols:['ol','sa','wb','mo','st','fo']},
+{id:'10',n:'Heavy Hood 10',cat:'Hoodie',bg:'#EAD9CF',pr:135,z:0,cols:['rs','mo','sa','mk','ch','or']},
+{id:'11',n:'Zip Hood 11',cat:'Zip-hoodie',bg:'#DCE3ED',pr:140,z:1,cols:['cb','nv','sk','mk','wb','ic']},
+{id:'12',n:'Heavy Hood 12',cat:'Hoodie',bg:'#D8DDD4',pr:120,z:0,cols:['sg','fo','ol','mk','st','wb']},
+{id:'13',n:'Zip Hood 13',cat:'Zip-hoodie',bg:'#E8E1D6',pr:155,z:1,cols:['mk','sa','st','ac','mo','wb']},
+{id:'14',n:'Heavy Hood 14',cat:'Hoodie',bg:'#E6D3D6',pr:130,z:0,cols:['bu','rs','ln','wb','mk','ch']},
+{id:'15',n:'Zip Hood 15',cat:'Zip-hoodie',bg:'#DDE0E3',pr:145,z:1,cols:['ic','ch','wb','nv','sk','st']},
+{id:'16',n:'Heavy Hood 16',cat:'Hoodie',bg:'#EDDCCB',pr:140,z:0,cols:['or','rs','sa','mk','wb','cb']},
+{id:'17',n:'Zip Hood 17',cat:'Zip-hoodie',bg:'#D6DCD2',pr:150,z:1,cols:['fo','ol','sg','ch','mk','mo']},
+{id:'18',n:'Heavy Hood 18',cat:'Hoodie',bg:'#C6B8AC',pr:125,z:0,cols:['ac','mo','mk','wb','sa','bu']},
+{id:'19',n:'Zip Hood 19',cat:'Zip-hoodie',bg:'#DED7E5',pr:160,z:1,cols:['ln','sk','ic','cb','mk','nv']},
+{id:'20',n:'Heavy Hood 20',cat:'Hoodie',bg:'#F3F0EA',pr:135,z:0,cols:['wb','ch','ic','mk','nv','ac']}];
+P.forEach((p,i)=>{p.cols=PAL.map((_,j)=>PAL[(i+j)%PAL.length]);p.sizes=['XS','S','M','L','XL','XXL'];p.out=p.id=='04'?['XS','XXL']:p.id=='02'?['XXL']:[]});
 const lum=h=>{const n=parseInt(h.slice(1),16);return((n>>16)*.3+(n>>8&255)*.59+(n&255)*.11)};
 function svg(hex,side,zip){const i=lum(hex)>140?'#1D1D1D':'#F3F0EA',dk='rgba(0,0,0,.18)';
 let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220"><path d="M60 40Q100 62 140 40L172 56 194 152 168 158 158 112 156 205Q100 214 44 205L42 112 32 158 6 152 28 56Z" fill="${hex}" stroke="${dk}"/>`;
@@ -132,7 +148,7 @@ return'data:image/svg+xml;utf8,'+encodeURIComponent(s+'</svg>')}
 const src=(p,k,side)=>{const c=p.cols.find(x=>x==k||x[0]==k);const a=Array.isArray(c)&&c[1]&&c[1][side];return a||svg(C[Array.isArray(c)?c[0]:k][1],side,p.z)};
 const fb=(img,p,k,side)=>img.onerror=()=>{img.onerror=null;img.src=svg(C[k][1],side,p.z)};
 const S={a:0,open:false,side:'front',col:{},size:null,cart:[]};
-try{S.cart=JSON.parse(localStorage.getItem('after.cart')||'[]')}catch(e){}
+try{S.cart=JSON.parse(localStorage.getItem('after.cart')||'[]').filter(c=>C[c.k]&&P.some(p=>p.id==c.id))}catch(e){}
 P.forEach(p=>S.col[p.id]=p.cols[0]);
 const M=()=>innerWidth<=760,stage=$('#stage'),els=[];
 function setImg(el,p,k,side,instant){const[a,b]=el.querySelectorAll('.l');const cur=a.style.opacity!='0'?a:b,nx=cur==a?b:a;
@@ -142,14 +158,15 @@ el.querySelector('.l').src=src(p,S.col[p.id],'front');el.querySelector('.l').alt
 // КРУГОВАЯ КАРУСЕЛЬ: вещи едут по эллипсу, t — цель (целое), pos — текущая позиция (пружина), o — раскрытие карточки (0..1)
 const RM=matchMedia('(prefers-reduced-motion:reduce)').matches,mod=(n,m)=>((n%m)+m)%m,wr=d=>mod(d+P.length/2,P.length)-P.length/2;
 Object.assign(S,{t:0,pos:0,vel:0,o:0,ot:0,drag:false,sh:-1});let run=0;
-function draw(){const N=P.length,W=innerWidth,H=innerHeight,m=M(),o=S.o;
-els.forEach((el,i)=>{const d=wr(i-S.pos),th=d*2*Math.PI/N,c=Math.cos(th),sn=Math.sin(th),k=(c+1)/2,w0=el.offsetWidth,Rx=w0*(m?.95:1.2),Ry=H*(m?.06:.09);
-let x=sn*Rx,y=-(1-c)*Ry*1.1,s=.6+.4*k,op=.5+.5*k,r=sn*5;const near=Math.max(0,1-Math.abs(d)),w=near*o;
+// V — сколько вещей видно на эллипсе одновременно; остальные скрыты и выезжают по мере прокрутки
+function draw(){const N=P.length,V=Math.min(N,8),W=innerWidth,H=innerHeight,m=M(),o=S.o;
+els.forEach((el,i)=>{const d=wr(i-S.pos),th=d*2*Math.PI/V,c=Math.cos(th),sn=Math.sin(th),k=(c+1)/2,w0=el.offsetWidth,Rx=w0*(m?.95:1.2),Ry=H*(m?.06:.09),vis=N>V?Math.min(1,Math.max(0,V/2-Math.abs(d))):1;
+let x=sn*Rx,y=-(1-c)*Ry*1.1,s=.6+.4*k,op=(.5+.5*k)*vis,r=sn*5;const near=Math.max(0,1-Math.abs(d)),w=near*o;
 x+=((m?0:-W*.2)-x)*w;y+=((m?-H*.05:0)-y)*w;s+=((m?1.05:1.35)-s)*w;r*=1-w;op=op*(1-o)+o*near;
 el.style.transform=`translate(-50%,-50%) translate(${x}px,${y}px) rotate(${r}deg) scale(${s})`;el.style.opacity=op;el.style.zIndex=Math.round(c*50+50);
-el.style.pointerEvents=S.open&&near<.5?'none':'auto';el.tabIndex=i==S.a?0:-1});
+el.style.pointerEvents=(S.open&&near<.5)||vis<.05?'none':'auto';el.style.visibility=vis<.01&&near==0?'hidden':'';el.tabIndex=i==S.a?0:-1});
 const ra=mod(Math.round(S.pos),N);if(ra!==S.sh){S.sh=ra;const p=P[ra];$('#hero').style.background=p.bg;$('#cn').textContent=p.n;$('#cm').textContent=`A—0001 · ${p.cat} · ${p.cols.length} colours`;
-$('#ix').textContent=String(ra+1).padStart(2,'0')+' / '+String(N).padStart(2,'0');$('#pb').style.left=(ra/N*100)+'%'}}
+$('#ix').textContent=String(ra+1).padStart(2,'0')+' / '+String(N).padStart(2,'0');$('#pb').style.left=(ra/N*100)+'%';$('#pb').style.width=(100/N)+'%'}}
 function tick(){if(RM){S.pos=S.t;S.o=S.ot}else{if(!S.drag){S.vel=(S.vel+(S.t-S.pos)*.035)*.82;S.pos+=S.vel}S.o+=(S.ot-S.o)*.09;if(Math.abs(S.ot-S.o)<.002)S.o=S.ot}
 draw();if(S.drag||Math.abs(S.t-S.pos)>.001||Math.abs(S.vel)>.001||S.o!=S.ot)requestAnimationFrame(tick);else run=0}
 function render(){if(!run){run=1;requestAnimationFrame(tick)}}
@@ -198,7 +215,7 @@ addEventListener('resize',render);
 $('#menu').onclick=()=>{const o=$('#ov').classList.toggle('on');$('#menu').setAttribute('aria-expanded',o)};$('#ov').onclick=()=>$('#ov').classList.remove('on');
 $('#acc').onclick=()=>toast('Account — не реализован в демо');$('#srch').onclick=()=>{open(false);$('#shopall').scrollIntoView();setTimeout(()=>$('#fq').focus(),600)};
 // collections
-const cl=[['span 5','#DCE3ED',0,'Washed Black / Navy','4/5'],['span 4','#DED7E5',1,'Zip series','3/4'],['span 3','#D8DDD4',2,'Sage','2/3'],['span 7','#C6B8AC',3,'Ash Cacao','16/10'],['span 5','#F3F0EA',4,'Milk','4/3']];
+const cl=[['span 5','#DCE3ED',0,'Washed Black / Navy','4/5'],['span 4','#DED7E5',1,'Zip series','3/4'],['span 3','#D8DDD4',2,'Sage','2/3'],['span 7','#C6B8AC',3,'Ash Cacao','16/10'],['span 5','#F3F0EA',4,'Bone','4/3']];
 cl.forEach(([s,b,i,t,ar])=>{const f=mk('div','ph rv',`<span class="mono">${t} · photo slot</span><img alt="">`);f.style.cssText=`grid-column:${s};background:${b};aspect-ratio:${ar};${i%2?'margin-top:40px':''}`;const p=P[i];f.querySelector('img').src=svg(C[p.cols[0]][1],i%2?'back':'front',p.z);$('#colg').append(f)});
 // shop
 const cats=[...new Set(P.map(p=>p.cat))],cols=[...new Set(P.flatMap(p=>p.cols))];
