@@ -113,9 +113,8 @@ section.s{padding:80px 16px}.look{margin:0 -16px}}
 
 <script>
 const $=s=>document.querySelector(s),mk=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
-const C={wb:['Washed Black','#2a2a2c'],nv:['Deep Navy','#1e2a4a'],mk:['Milk','#ECE6DA'],ac:['Ash Cacao','#5b4a42'],sg:['Sage Grey','#8d9686'],cb:['Cobalt','#4355C5'],
-ch:['Charcoal','#45464a'],st:['Stone','#b8b0a2'],rs:['Rust','#9a4a2e'],fo:['Forest','#2f4a3a'],sk:['Sky','#a9c1db'],ln:['Lilac','#b9a8cc'],
-bu:['Burgundy','#5e2230'],sa:['Sand','#d4c3a3'],ol:['Olive','#6b6b3f'],ic:['Ice Grey','#d7dade'],mo:['Mocha','#7a5c48'],or:['Signal Orange','#d9622b']};
+const C={wb:['Washed Black','#2b2a29'],nv:['Deep Navy','#1f2738'],bn:['Bone','#E3DCCD'],ms:['Mineral Shade','#8A9296'],ac:['Ash Cacao','#5b4a42'],sp:['Soft Pink','#E6C7C4']};
+const PAL=Object.keys(C);
 // КАТАЛОГ: для реальных фото добавьте cols:[[key,{front:'url',back:'url',detail:'url'}]] — иначе показывается placeholder
 const P=[
 {id:'01',n:'Heavy Hood 01',cat:'Hoodie',bg:'#DCE3ED',pr:120,z:0,cols:['wb','nv','mk','ac','sg','ch']},
@@ -138,7 +137,7 @@ const P=[
 {id:'18',n:'Heavy Hood 18',cat:'Hoodie',bg:'#C6B8AC',pr:125,z:0,cols:['ac','mo','mk','wb','sa','bu']},
 {id:'19',n:'Zip Hood 19',cat:'Zip-hoodie',bg:'#DED7E5',pr:160,z:1,cols:['ln','sk','ic','cb','mk','nv']},
 {id:'20',n:'Heavy Hood 20',cat:'Hoodie',bg:'#F3F0EA',pr:135,z:0,cols:['wb','ch','ic','mk','nv','ac']}];
-P.forEach(p=>{p.sizes=['XS','S','M','L','XL','XXL'];p.out=p.id=='04'?['XS','XXL']:p.id=='02'?['XXL']:[]});
+P.forEach((p,i)=>{p.cols=PAL.map((_,j)=>PAL[(i+j)%PAL.length]);p.sizes=['XS','S','M','L','XL','XXL'];p.out=p.id=='04'?['XS','XXL']:p.id=='02'?['XXL']:[]});
 const lum=h=>{const n=parseInt(h.slice(1),16);return((n>>16)*.3+(n>>8&255)*.59+(n&255)*.11)};
 function svg(hex,side,zip){const i=lum(hex)>140?'#1D1D1D':'#F3F0EA',dk='rgba(0,0,0,.18)';
 let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220"><path d="M60 40Q100 62 140 40L172 56 194 152 168 158 158 112 156 205Q100 214 44 205L42 112 32 158 6 152 28 56Z" fill="${hex}" stroke="${dk}"/>`;
@@ -149,7 +148,7 @@ return'data:image/svg+xml;utf8,'+encodeURIComponent(s+'</svg>')}
 const src=(p,k,side)=>{const c=p.cols.find(x=>x==k||x[0]==k);const a=Array.isArray(c)&&c[1]&&c[1][side];return a||svg(C[Array.isArray(c)?c[0]:k][1],side,p.z)};
 const fb=(img,p,k,side)=>img.onerror=()=>{img.onerror=null;img.src=svg(C[k][1],side,p.z)};
 const S={a:0,open:false,side:'front',col:{},size:null,cart:[]};
-try{S.cart=JSON.parse(localStorage.getItem('after.cart')||'[]')}catch(e){}
+try{S.cart=JSON.parse(localStorage.getItem('after.cart')||'[]').filter(c=>C[c.k]&&P.some(p=>p.id==c.id))}catch(e){}
 P.forEach(p=>S.col[p.id]=p.cols[0]);
 const M=()=>innerWidth<=760,stage=$('#stage'),els=[];
 function setImg(el,p,k,side,instant){const[a,b]=el.querySelectorAll('.l');const cur=a.style.opacity!='0'?a:b,nx=cur==a?b:a;
@@ -216,7 +215,7 @@ addEventListener('resize',render);
 $('#menu').onclick=()=>{const o=$('#ov').classList.toggle('on');$('#menu').setAttribute('aria-expanded',o)};$('#ov').onclick=()=>$('#ov').classList.remove('on');
 $('#acc').onclick=()=>toast('Account — не реализован в демо');$('#srch').onclick=()=>{open(false);$('#shopall').scrollIntoView();setTimeout(()=>$('#fq').focus(),600)};
 // collections
-const cl=[['span 5','#DCE3ED',0,'Washed Black / Navy','4/5'],['span 4','#DED7E5',1,'Zip series','3/4'],['span 3','#D8DDD4',2,'Sage','2/3'],['span 7','#C6B8AC',3,'Ash Cacao','16/10'],['span 5','#F3F0EA',4,'Milk','4/3']];
+const cl=[['span 5','#DCE3ED',0,'Washed Black / Navy','4/5'],['span 4','#DED7E5',1,'Zip series','3/4'],['span 3','#D8DDD4',2,'Sage','2/3'],['span 7','#C6B8AC',3,'Ash Cacao','16/10'],['span 5','#F3F0EA',4,'Bone','4/3']];
 cl.forEach(([s,b,i,t,ar])=>{const f=mk('div','ph rv',`<span class="mono">${t} · photo slot</span><img alt="">`);f.style.cssText=`grid-column:${s};background:${b};aspect-ratio:${ar};${i%2?'margin-top:40px':''}`;const p=P[i];f.querySelector('img').src=svg(C[p.cols[0]][1],i%2?'back':'front',p.z);$('#colg').append(f)});
 // shop
 const cats=[...new Set(P.map(p=>p.cat))],cols=[...new Set(P.flatMap(p=>p.cols))];
