@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="uk"><head><meta charset="utf-8"><title>AFTER® — MORE TO COME</title>
+<!DOCTYPE html><html lang="uk"><head><meta charset="utf-8"><title>AFTER® — MORE TO COME</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/favicon.svg">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Space+Mono&display=swap" rel="stylesheet">
@@ -77,8 +77,8 @@ header{padding:14px 16px;transition:background .35s,box-shadow .35s}header nav b
 .it{width:62vw;top:40%}.open .it{top:40%}
 .tl,.tr{display:none}
 .panel{left:0;right:0;top:auto;bottom:0;width:auto;height:52%;overflow:hidden;padding:0;transform:translateY(100%);background:var(--pb,var(--bg));border-radius:22px 22px 0 0}
-.pi{display:block;flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:16px 20px 12px}
-.panel .add{flex:none;width:auto;margin:8px 20px calc(14px + env(safe-area-inset-bottom,0px))}
+.pi{display:block;flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:16px 20px calc(16px + env(safe-area-inset-bottom,0px))}
+.panel .add{margin:18px 0 6px}
 .open .panel{transform:none}.panel h1{font-size:26px}
 .back{left:16px;top:66px;bottom:auto}.nav2{display:none}
 .cap h2{font-size:21px}.ctl{gap:14px}.grid>*{grid-column:span 12!important}
@@ -186,11 +186,11 @@ pl.innerHTML=`<div class="pi"><div class="mono">A—0001 · ${p.cat}</div><h1>${
 <div class="row"><span class="mono">Colour — <b>${C[k][0]}</b> · SKU A0001-${p.id}-${k.toUpperCase()}</span><div class="sw" id="sw"></div></div>
 <div class="row"><span class="mono">View</span><div class="seg"><button aria-pressed="${S.side=='front'}" data-v="front">Front</button><button aria-pressed="${S.side=='back'}" data-v="back">Back</button></div></div>
 <div class="row"><span class="mono">Size</span><div class="sz" id="sz"></div><div class="mono" id="av" style="margin-top:8px;opacity:.7"></div></div>
+<button class="add" id="ad"><span>ADD TO BAG</span><span>${fmt(p.pr)}</span></button>
 <div class="row lt"><details open><summary class="mono">Description</summary><p>Опис — слот. Реальні характеристики буде додано з каталогу.</p></details>
 <details><summary class="mono">Composition</summary><p>Склад — не вказано (TBD).</p></details>
 <details><summary class="mono">Size guide</summary><table><tr><td>Size</td><td>Chest</td><td>Length</td></tr><tr><td>XS–XXL</td><td>—</td><td>—</td></tr></table><p>Розмірну сітку буде додано.</p></details></div>
-<div class="dt lt"><div class="mono">Print detail<br>asset slot</div><div class="mono">Fabric detail<br>asset slot</div></div></div>
-<button class="add" id="ad"><span>ADD TO BAG</span><span>${fmt(p.pr)}</span></button>`;
+<div class="dt lt"><div class="mono">Print detail<br>asset slot</div><div class="mono">Fabric detail<br>asset slot</div></div></div>`;
 const sw=$('#sw');p.cols.forEach(c=>{const kk=Array.isArray(c)?c[0]:c,b=mk('button');b.style.background=C[kk][1];b.setAttribute('aria-label',C[kk][0]);b.setAttribute('aria-pressed',kk==k);b.onclick=()=>{S.col[p.id]=kk;setImg(els[S.a],p,kk,S.side);panel()};sw.append(b)});
 const sz=$('#sz');p.sizes.forEach(z=>{const b=mk('button','',z),o=p.out.includes(z);b.disabled=o;b.setAttribute('aria-pressed',S.size==z);b.onclick=()=>{S.size=z;panel()};sz.append(b)});
 $('#av').textContent=p.out.length?'Sold out (demo): '+p.out.join(', '):'All sizes in stock (demo)';
