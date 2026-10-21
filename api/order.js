@@ -1,5 +1,5 @@
-// Vercel serverless function: принимает заказ и отправляет его в Telegram.
-// Переменные окружения (Vercel → Settings → Environment Variables): TG_TOKEN, TG_CHAT_ID
+// Vercel serverless function: приймає замовлення і надсилає його в Telegram.
+// Змінні оточення (Vercel → Settings → Environment Variables): TG_TOKEN, TG_CHAT_ID
 module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).end();
   const b = req.body || {};
@@ -11,8 +11,8 @@ module.exports = async (req, res) => {
   const lines = b.items.map(i =>
     `• ${clean(i.name)} | ${clean(i.color)} | ${clean(i.size, 10)} × ${Number(i.qty) || 1} — ${Number(i.price) || 0} ₴`);
   const total = b.items.reduce((s, i) => s + (Number(i.price) || 0) * (Number(i.qty) || 1), 0);
-  const text = `🧥 Новый заказ AFTER®\n\n${name}\n${phone}\n${city}, НП №${np}\n` +
-    (note ? `Комментарий: ${note}\n` : '') + `\n${lines.join('\n')}\n\nИтого: ${total} ₴ (цены пришли с сайта — проверьте)`;
+  const text = `🧥 Нове замовлення AFTER®\n\n${name}\n${phone}\n${city}, НП №${np}\n` +
+    (note ? `Коментар: ${note}\n` : '') + `\n${lines.join('\n')}\n\nРазом: ${total} ₴ (ціни надійшли з сайту — перевірте)`;
   try {
     const r = await fetch(`https://api.telegram.org/bot${process.env.TG_TOKEN}/sendMessage`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
