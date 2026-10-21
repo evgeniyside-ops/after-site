@@ -212,7 +212,8 @@ $('#ex').onclick=()=>open(true);$('#bk').onclick=()=>open(false);
 [['#pv',-1],['#nx',1],['#pv2',-1],['#nx2',1]].forEach(([s,d])=>$(s).onclick=()=>go(S.t+d));
 addEventListener('keydown',e=>{if(/INPUT|SELECT/.test(document.activeElement.tagName))return;if(e.key=='ArrowRight')go(S.t+1);if(e.key=='ArrowLeft')go(S.t-1);if(e.key=='Escape'){open(false);$('#dr').classList.remove('on');$('#ov').classList.remove('on')}});
 addEventListener('resize',render);
-$('#menu').onclick=()=>{const o=$('#ov').classList.toggle('on');$('#menu').setAttribute('aria-expanded',o)};$('#ov').onclick=()=>$('#ov').classList.remove('on');
+$('#menu').onclick=()=>{const o=$('#ov').classList.toggle('on');$('#menu').setAttribute('aria-expanded',o)};$('#ov').onclick=()=>{$('#ov').classList.remove('on');$('#menu').setAttribute('aria-expanded',false)};
+document.querySelectorAll('#ov a').forEach(a=>a.addEventListener('click',e=>{const wasOpen=S.open;if(wasOpen)open(false);if(wasOpen&&a.hash=='#collections'){e.preventDefault();scrollTo({top:0,behavior:RM?'auto':'smooth'})}}));
 $('#acc').onclick=()=>toast('Account — не реализован в демо');$('#srch').onclick=()=>{open(false);$('#shopall').scrollIntoView();setTimeout(()=>$('#fq').focus(),600)};
 // collections
 const cl=[['span 5','#DCE3ED',0,'Washed Black / Navy','4/5'],['span 4','#DED7E5',1,'Zip series','3/4'],['span 3','#D8DDD4',2,'Sage','2/3'],['span 7','#C6B8AC',3,'Ash Cacao','16/10'],['span 5','#F3F0EA',4,'Bone','4/3']];
