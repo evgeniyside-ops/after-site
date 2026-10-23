@@ -92,7 +92,7 @@ section.s{padding:80px 16px}.look{margin:0 -16px}}
 
 <div id="hero" role="region" aria-label="Showroom AFTER®">
 <div class="big" aria-hidden="true">AFTER</div><div class="ring" aria-hidden="true"></div>
-<div class="tag mono tl">A—0001<br>MORE TO COME</div><div class="tag mono tr">Digital showroom<br>Demo assets</div>
+<div class="tag mono tl">A—0001<br>MORE TO COME</div><div class="tag mono tr">Digital showroom<br>A—0001</div>
 <div id="stage"></div>
 <div class="cap"><h2 id="cn"></h2><div class="mono" id="cm" style="margin-top:4px"></div>
 <div class="ctl"><button class="arr" id="pv" aria-label="Previous">←</button><span class="mono" id="ix"></span><div class="bar"><i id="pb"></i></div><button class="arr" id="nx" aria-label="Next">→</button></div>
@@ -112,7 +112,7 @@ section.s{padding:80px 16px}.look{margin:0 -16px}}
 <select id="fr" aria-label="Sort"><option value="">Sort: default</option><option value="a">Price ↑</option><option value="d">Price ↓</option><option value="n">Name</option></select></div><div id="shop"></div></section>
 <section class="s" id="about"><div class="mono">04 — About AFTER®</div><h2 class="h rv" style="margin-top:14px">MORE<br>TO COME.</h2>
 <p class="rv" style="max-width:420px;margin-top:30px">Текст про бренд — слот. Історію AFTER® буде додано з ваших матеріалів; тут навмисно нічого не вигадано.</p></section>
-<footer class="mono"><span>AFTER® — A—0001</span><span>Прототип · placeholder-зображення · демо-ціни</span></footer>
+<footer class="mono"><span>AFTER® — A—0001</span><span>MORE TO COME</span></footer>
 
 <aside class="drawer" id="dr" aria-label="Bag"><div style="display:flex;justify-content:space-between"><b>BAG</b><button id="cx">Close ✕</button></div><div id="ci" style="flex:1;overflow:auto"></div><div id="tot" style="padding:12px 0"></div>
 <button class="add" id="co"><span>ОФОРМИТИ ЗАМОВЛЕННЯ</span><span>→</span></button>
@@ -121,31 +121,23 @@ section.s{padding:80px 16px}.look{margin:0 -16px}}
 
 <script>
 const $=s=>document.querySelector(s),mk=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
-const C={wb:['Washed Black','#2b2a29'],nv:['Deep Navy','#1f2738'],bn:['Bone','#E3DCCD'],ms:['Mineral Shade','#8A9296'],ac:['Ash Cacao','#5b4a42'],sp:['Soft Pink','#E6C7C4']};
+const C={wb:['Washed Black','#2b2a29'],nv:['Deep Navy','#1f2738'],bn:['Bone','#E3DCCD'],ms:['Mineral Sage','#8A9296'],ac:['Ash Cacao','#5b4a42'],sp:['Soft Pink','#E6C7C4']};
 const PAL=Object.keys(C);
-// КАТАЛОГ: для реальних фото додайте cols:[[key,{front:'url',back:'url',detail:'url'}]] — інакше показується placeholder
+// КАТАЛОГ: img:{колір:{front:'/img/…webp',back:'/img/…webp'}} — якщо файлу нема, показується запасна картинка
 const P=[
-{id:'01',n:'Heavy Hood 01',cat:'Hoodie',bg:'#DCE3ED',pr:120,z:0,cols:['wb','nv','mk','ac','sg','ch']},
-{id:'02',n:'Zip Hood 02',cat:'Zip-hoodie',bg:'#DED7E5',pr:140,z:1,cols:['nv','mk','ac','sk','wb','ic']},
-{id:'03',n:'Heavy Hood 03',cat:'Hoodie',bg:'#D8DDD4',pr:120,z:0,cols:['sg','wb','mk','fo','ol','st']},
-{id:'04',n:'Zip Hood 04',cat:'Zip-hoodie',bg:'#C6B8AC',pr:150,z:1,cols:['ac','wb','cb','mo','rs','sa']},
-{id:'05',n:'Heavy Hood 05',cat:'Hoodie',bg:'#F3F0EA',pr:130,z:0,cols:['mk','nv','cb','sg','ln','ic']},
-{id:'06',n:'Heavy Hood 06',cat:'Hoodie',bg:'#E4DCCF',pr:130,z:0,cols:['ch','st','mk','fo','rs','wb']},
-{id:'07',n:'Zip Hood 07',cat:'Zip-hoodie',bg:'#D5DDE6',pr:145,z:1,cols:['nv','sk','ic','wb','cb','ch']},
-{id:'08',n:'Heavy Hood 08',cat:'Hoodie',bg:'#E2D9E8',pr:125,z:0,cols:['ln','mk','bu','wb','ic','sg']},
-{id:'09',n:'Zip Hood 09',cat:'Zip-hoodie',bg:'#D9D4C4',pr:150,z:1,cols:['ol','sa','wb','mo','st','fo']},
-{id:'10',n:'Heavy Hood 10',cat:'Hoodie',bg:'#EAD9CF',pr:135,z:0,cols:['rs','mo','sa','mk','ch','or']},
-{id:'11',n:'Zip Hood 11',cat:'Zip-hoodie',bg:'#DCE3ED',pr:140,z:1,cols:['cb','nv','sk','mk','wb','ic']},
-{id:'12',n:'Heavy Hood 12',cat:'Hoodie',bg:'#D8DDD4',pr:120,z:0,cols:['sg','fo','ol','mk','st','wb']},
-{id:'13',n:'Zip Hood 13',cat:'Zip-hoodie',bg:'#E8E1D6',pr:155,z:1,cols:['mk','sa','st','ac','mo','wb']},
-{id:'14',n:'Heavy Hood 14',cat:'Hoodie',bg:'#E6D3D6',pr:130,z:0,cols:['bu','rs','ln','wb','mk','ch']},
-{id:'15',n:'Zip Hood 15',cat:'Zip-hoodie',bg:'#DDE0E3',pr:145,z:1,cols:['ic','ch','wb','nv','sk','st']},
-{id:'16',n:'Heavy Hood 16',cat:'Hoodie',bg:'#EDDCCB',pr:140,z:0,cols:['or','rs','sa','mk','wb','cb']},
-{id:'17',n:'Zip Hood 17',cat:'Zip-hoodie',bg:'#D6DCD2',pr:150,z:1,cols:['fo','ol','sg','ch','mk','mo']},
-{id:'18',n:'Heavy Hood 18',cat:'Hoodie',bg:'#C6B8AC',pr:125,z:0,cols:['ac','mo','mk','wb','sa','bu']},
-{id:'19',n:'Zip Hood 19',cat:'Zip-hoodie',bg:'#DED7E5',pr:160,z:1,cols:['ln','sk','ic','cb','mk','nv']},
-{id:'20',n:'Heavy Hood 20',cat:'Hoodie',bg:'#F3F0EA',pr:135,z:0,cols:['wb','ch','ic','mk','nv','ac']}];
-P.forEach((p,i)=>{p.cols=PAL.map((_,j)=>PAL[(i+j)%PAL.length]);p.sizes=['XS','S','M','L','XL','XXL'];p.out=p.id=='04'?['XS','XXL']:p.id=='02'?['XXL']:[]});
+{id:"halo-trace-hoodie",n:"Halo Trace Hoodie",line:"Halo Trace",cat:'Hoodie',bg:'#DCE3ED',pr:4299,z:0,cols:["wb", "nv", "bn", "ms", "ac", "sp"],img:{"sp":{"back":"/img/halo-trace/hoodie-soft-pink-back.webp","front":"/img/halo-trace/hoodie-soft-pink-front.webp"},"bn":{"front":"/img/halo-trace/hoodie-bone-front.webp","back":"/img/halo-trace/hoodie-bone-back.webp"},"wb":{"front":"/img/halo-trace/hoodie-washed-black-front.webp","back":"/img/halo-trace/hoodie-washed-black-back.webp"},"ms":{"back":"/img/halo-trace/hoodie-mineral-sage-back.webp","front":"/img/halo-trace/hoodie-mineral-sage-front.webp"},"ac":{"front":"/img/halo-trace/hoodie-ash-cacao-front.webp","back":"/img/halo-trace/hoodie-ash-cacao-back.webp"},"nv":{"back":"/img/halo-trace/hoodie-deep-navy-back.webp","front":"/img/halo-trace/hoodie-deep-navy-front.webp"}}},
+{id:"halo-trace-zip",n:"Halo Trace Zip Hoodie",line:"Halo Trace",cat:'Zip-hoodie',bg:'#DCE3ED',pr:5199,z:1,cols:["wb", "nv", "bn", "ms", "ac", "sp"],img:{"wb":{"back":"/img/halo-trace/zip-washed-black-back.webp","front":"/img/halo-trace/zip-washed-black-front.webp"},"ac":{"front":"/img/halo-trace/zip-ash-cacao-front.webp","back":"/img/halo-trace/zip-ash-cacao-back.webp"},"nv":{"back":"/img/halo-trace/zip-deep-navy-back.webp","front":"/img/halo-trace/zip-deep-navy-front.webp"},"sp":{"back":"/img/halo-trace/zip-soft-pink-back.webp","front":"/img/halo-trace/zip-soft-pink-front.webp"},"bn":{"back":"/img/halo-trace/zip-bone-back.webp","front":"/img/halo-trace/zip-bone-front.webp"},"ms":{"back":"/img/halo-trace/zip-mineral-sage-back.webp","front":"/img/halo-trace/zip-mineral-sage-front.webp"}}},
+{id:"ritual-type-hoodie",n:"Ritual Type Hoodie",line:"Ritual Type",cat:'Hoodie',bg:'#DED7E5',pr:4299,z:0,cols:["wb", "nv", "bn", "ms", "ac", "sp"],img:{"sp":{"back":"/img/ritual-type/hoodie-soft-pink-back.webp","front":"/img/ritual-type/hoodie-soft-pink-front.webp"},"wb":{"back":"/img/ritual-type/hoodie-washed-black-back.webp","front":"/img/ritual-type/hoodie-washed-black-front.webp"},"ac":{"front":"/img/ritual-type/hoodie-ash-cacao-front.webp","back":"/img/ritual-type/hoodie-ash-cacao-back.webp"},"nv":{"front":"/img/ritual-type/hoodie-deep-navy-front.webp","back":"/img/ritual-type/hoodie-deep-navy-back.webp"},"bn":{"back":"/img/ritual-type/hoodie-bone-back.webp","front":"/img/ritual-type/hoodie-bone-front.webp"},"ms":{"front":"/img/ritual-type/hoodie-mineral-sage-front.webp","back":"/img/ritual-type/hoodie-mineral-sage-back.webp"}}},
+{id:"ritual-type-zip",n:"Ritual Type Zip Hoodie",line:"Ritual Type",cat:'Zip-hoodie',bg:'#DED7E5',pr:5199,z:1,cols:["wb", "nv", "bn", "ms", "ac", "sp"],img:{"sp":{"front":"/img/ritual-type/zip-soft-pink-front.webp","back":"/img/ritual-type/zip-soft-pink-back.webp"},"ac":{"front":"/img/ritual-type/zip-ash-cacao-front.webp","back":"/img/ritual-type/zip-ash-cacao-back.webp"},"nv":{"front":"/img/ritual-type/zip-deep-navy-front.webp","back":"/img/ritual-type/zip-deep-navy-back.webp"},"wb":{"front":"/img/ritual-type/zip-washed-black-front.webp","back":"/img/ritual-type/zip-washed-black-back.webp"},"bn":{"back":"/img/ritual-type/zip-bone-back.webp","front":"/img/ritual-type/zip-bone-front.webp"},"ms":{"front":"/img/ritual-type/zip-mineral-sage-front.webp","back":"/img/ritual-type/zip-mineral-sage-back.webp"}}},
+{id:"blur-memory-hoodie",n:"Blur Memory Hoodie",line:"Blur Memory",cat:'Hoodie',bg:'#D8DDD4',pr:4299,z:0,cols:["wb", "nv", "bn", "ms", "ac", "sp"],img:{"ac":{"front":"/img/blur-memory/hoodie-ash-cacao-front.webp","back":"/img/blur-memory/hoodie-ash-cacao-back.webp"},"ms":{"front":"/img/blur-memory/hoodie-mineral-sage-front.webp","back":"/img/blur-memory/hoodie-mineral-sage-back.webp"},"wb":{"front":"/img/blur-memory/hoodie-washed-black-front.webp","back":"/img/blur-memory/hoodie-washed-black-back.webp"},"sp":{"back":"/img/blur-memory/hoodie-soft-pink-back.webp","front":"/img/blur-memory/hoodie-soft-pink-front.webp"},"nv":{"back":"/img/blur-memory/hoodie-deep-navy-back.webp","front":"/img/blur-memory/hoodie-deep-navy-front.webp"},"bn":{"back":"/img/blur-memory/hoodie-bone-back.webp","front":"/img/blur-memory/hoodie-bone-front.webp"}}},
+{id:"blur-memory-zip",n:"Blur Memory Zip Hoodie",line:"Blur Memory",cat:'Zip-hoodie',bg:'#D8DDD4',pr:5199,z:1,cols:["wb", "nv", "bn", "ms", "ac", "sp"],img:{"wb":{"front":"/img/blur-memory/zip-washed-black-front.webp","back":"/img/blur-memory/zip-washed-black-back.webp"},"ac":{"front":"/img/blur-memory/zip-ash-cacao-front.webp","back":"/img/blur-memory/zip-ash-cacao-back.webp"},"nv":{"back":"/img/blur-memory/zip-deep-navy-back.webp","front":"/img/blur-memory/zip-deep-navy-front.webp"},"ms":{"front":"/img/blur-memory/zip-mineral-sage-front.webp","back":"/img/blur-memory/zip-mineral-sage-back.webp"},"sp":{"back":"/img/blur-memory/zip-soft-pink-back.webp","front":"/img/blur-memory/zip-soft-pink-front.webp"},"bn":{"back":"/img/blur-memory/zip-bone-back.webp","front":"/img/blur-memory/zip-bone-front.webp"}}},
+{id:"ritual-hoodie",n:"Ritual Hoodie",line:"Ritual",cat:'Hoodie',bg:'#C6B8AC',pr:4299,z:0,cols:["wb", "nv", "bn", "ms", "ac", "sp"],img:{"nv":{"front":"/img/ritual/hoodie-deep-navy-front.webp","back":"/img/ritual/hoodie-deep-navy-back.webp"},"bn":{"back":"/img/ritual/hoodie-bone-back.webp","front":"/img/ritual/hoodie-bone-front.webp"},"sp":{"front":"/img/ritual/hoodie-soft-pink-front.webp","back":"/img/ritual/hoodie-soft-pink-back.webp"},"ms":{"back":"/img/ritual/hoodie-mineral-sage-back.webp","front":"/img/ritual/hoodie-mineral-sage-front.webp"},"wb":{"back":"/img/ritual/hoodie-washed-black-back.webp","front":"/img/ritual/hoodie-washed-black-front.webp"},"ac":{"back":"/img/ritual/hoodie-ash-cacao-back.webp","front":"/img/ritual/hoodie-ash-cacao-front.webp"}}},
+{id:"ritual-zip",n:"Ritual Zip Hoodie",line:"Ritual",cat:'Zip-hoodie',bg:'#C6B8AC',pr:5199,z:1,cols:["wb", "nv", "bn", "ms", "ac", "sp"],img:{"bn":{"back":"/img/ritual/zip-bone-back.webp","front":"/img/ritual/zip-bone-front.webp"},"ac":{"front":"/img/ritual/zip-ash-cacao-front.webp","back":"/img/ritual/zip-ash-cacao-back.webp"},"sp":{"front":"/img/ritual/zip-soft-pink-front.webp","back":"/img/ritual/zip-soft-pink-back.webp"},"nv":{"front":"/img/ritual/zip-deep-navy-front.webp","back":"/img/ritual/zip-deep-navy-back.webp"},"wb":{"front":"/img/ritual/zip-washed-black-front.webp","back":"/img/ritual/zip-washed-black-back.webp"},"ms":{"front":"/img/ritual/zip-mineral-sage-front.webp","back":"/img/ritual/zip-mineral-sage-back.webp"}}},
+{id:"fragment-fields-hoodie",n:"Fragment Fields Hoodie",line:"Fragment Fields",cat:'Hoodie',bg:'#F3F0EA',pr:4299,z:0,cols:["wb", "nv", "bn", "ms", "ac", "sp"],img:{"wb":{"front":"/img/fragment-fields/hoodie-washed-black-front.webp","back":"/img/fragment-fields/hoodie-washed-black-back.webp"},"bn":{"front":"/img/fragment-fields/hoodie-bone-front.webp","back":"/img/fragment-fields/hoodie-bone-back.webp"},"ac":{"front":"/img/fragment-fields/hoodie-ash-cacao-front.webp","back":"/img/fragment-fields/hoodie-ash-cacao-back.webp"},"sp":{"front":"/img/fragment-fields/hoodie-soft-pink-front.webp","back":"/img/fragment-fields/hoodie-soft-pink-back.webp"},"ms":{"back":"/img/fragment-fields/hoodie-mineral-sage-back.webp","front":"/img/fragment-fields/hoodie-mineral-sage-front.webp"},"nv":{"back":"/img/fragment-fields/hoodie-deep-navy-back.webp","front":"/img/fragment-fields/hoodie-deep-navy-front.webp"}}},
+{id:"fragment-fields-zip",n:"Fragment Fields Zip Hoodie",line:"Fragment Fields",cat:'Zip-hoodie',bg:'#F3F0EA',pr:5199,z:1,cols:["wb", "nv", "bn", "ms", "ac", "sp"],img:{"wb":{"front":"/img/fragment-fields/zip-washed-black-front.webp","back":"/img/fragment-fields/zip-washed-black-back.webp"},"bn":{"back":"/img/fragment-fields/zip-bone-back.webp","front":"/img/fragment-fields/zip-bone-front.webp"},"ac":{"front":"/img/fragment-fields/zip-ash-cacao-front.webp","back":"/img/fragment-fields/zip-ash-cacao-back.webp"},"sp":{"back":"/img/fragment-fields/zip-soft-pink-back.webp","front":"/img/fragment-fields/zip-soft-pink-front.webp"},"ms":{"back":"/img/fragment-fields/zip-mineral-sage-back.webp","front":"/img/fragment-fields/zip-mineral-sage-front.webp"},"nv":{"back":"/img/fragment-fields/zip-deep-navy-back.webp","front":"/img/fragment-fields/zip-deep-navy-front.webp"}}},
+{id:"00-01-hoodie",n:"00-01 Hoodie",line:"00-01",cat:'Hoodie',bg:'#DCE3ED',pr:4299,z:0,cols:["wb"],img:{"wb":{"front":"/img/00-01/hoodie-washed-black-front.webp"}}},
+{id:"00-01-zip",n:"00-01 Zip Hoodie",line:"00-01",cat:'Zip-hoodie',bg:'#DCE3ED',pr:5199,z:1,cols:["wb", "ms", "ac", "sp"],img:{"ac":{"front":"/img/00-01/zip-ash-cacao-front.webp","back":"/img/00-01/zip-ash-cacao-back.webp"},"ms":{"back":"/img/00-01/zip-mineral-sage-back.webp","front":"/img/00-01/zip-mineral-sage-front.webp"},"sp":{"front":"/img/00-01/zip-soft-pink-front.webp","back":"/img/00-01/zip-soft-pink-back.webp"},"wb":{"back":"/img/00-01/zip-washed-black-back.webp","front":"/img/00-01/zip-washed-black-front.webp"}}}];
+P.forEach(p=>{p.sizes=['XS','S','M','L','XL','XXL'];p.out=[]});
 const lum=h=>{const n=parseInt(h.slice(1),16);return((n>>16)*.3+(n>>8&255)*.59+(n&255)*.11)};
 function svg(hex,side,zip){const i=lum(hex)>140?'#1D1D1D':'#F3F0EA',dk='rgba(0,0,0,.18)';
 let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220"><path d="M60 40Q100 62 140 40L172 56 194 152 168 158 158 112 156 205Q100 214 44 205L42 112 32 158 6 152 28 56Z" fill="${hex}" stroke="${dk}"/>`;
@@ -153,7 +145,7 @@ s+=side=='back'?`<path d="M66 38Q100 4 134 38Q100 54 66 38Z" fill="${hex}" strok
 :`<path d="M70 38Q100 6 130 38Q100 72 70 38Z" fill="${hex}" stroke="${dk}"/><path d="M78 40Q100 18 122 40Q100 62 78 40Z" fill="rgba(0,0,0,.28)"/><path d="M64 150H136L146 186H54Z" fill="none" stroke="${dk}"/><text x="100" y="104" font-family="Arial Black,sans-serif" font-size="14" text-anchor="middle" fill="${i}" letter-spacing="1.5">AFTER®</text><path d="M92 62L90 96M108 62L110 96" stroke="${i}" stroke-width="1.4" opacity=".6"/>`;
 if(zip&&side!='back')s+=`<path d="M100 52V206" stroke="${i}" stroke-width="2" stroke-dasharray="2 2" opacity=".7"/>`;
 return'data:image/svg+xml;utf8,'+encodeURIComponent(s+'</svg>')}
-const src=(p,k,side)=>{const c=p.cols.find(x=>x==k||x[0]==k);const a=Array.isArray(c)&&c[1]&&c[1][side];return a||svg(C[Array.isArray(c)?c[0]:k][1],side,p.z)};
+const src=(p,k,side)=>{const a=p.img&&p.img[k];return(a&&(a[side]||a.front))||svg(C[k][1],side,p.z)};
 const fb=(img,p,k,side)=>img.onerror=()=>{img.onerror=null;img.src=svg(C[k][1],side,p.z)};
 const S={a:0,open:false,side:'front',col:{},size:null,cart:[]};
 try{S.cart=JSON.parse(localStorage.getItem('after.cart')||'[]').filter(c=>C[c.k]&&P.some(p=>p.id==c.id))}catch(e){}
@@ -162,7 +154,7 @@ const M=()=>innerWidth<=760,stage=$('#stage'),els=[];
 function setImg(el,p,k,side,instant){const[a,b]=el.querySelectorAll('.l');const cur=a.style.opacity!='0'?a:b,nx=cur==a?b:a;
 nx.src=src(p,k,side);fb(nx,p,k,side);nx.style.opacity=1;cur.style.opacity=0}
 P.forEach((p,i)=>{const el=mk('div','it','<img class="l" alt=""><img class="l" alt="" style="opacity:0">');el.setAttribute('role','button');el.tabIndex=-1;el.setAttribute('aria-label',p.n);
-el.querySelector('.l').src=src(p,S.col[p.id],'front');el.querySelector('.l').alt=p.n+' (demo)';stage.append(el);els.push(el)});
+el.querySelector('.l').src=src(p,S.col[p.id],'front');el.querySelector('.l').alt=p.n;stage.append(el);els.push(el)});
 // КРУГОВА КАРУСЕЛЬ: речі їдуть по еліпсу, t — ціль (ціле), pos — поточна позиція (пружина), o — розкриття картки (0..1)
 const RM=matchMedia('(prefers-reduced-motion:reduce)').matches,mod=(n,m)=>((n%m)+m)%m,wr=d=>mod(d+P.length/2,P.length)-P.length/2;
 Object.assign(S,{t:0,pos:0,vel:0,o:0,ot:0,drag:false,sh:-1});let run=0;
@@ -182,7 +174,7 @@ function go(n){S.t=n;S.a=mod(n,P.length);S.side='front';S.size=null;if(S.open)pa
 function open(v){S.open=v;S.ot=v?1:0;$('#hero').classList.toggle('open',v);document.body.classList.toggle('lock',v);if(v){scrollTo(0,0);panel()}render()}
 const fmt=n=>n+' ₴';
 function panel(){const p=P[S.a],k=S.col[p.id],pl=$('#panel');pl.style.setProperty('--pb',p.bg);
-pl.innerHTML=`<div class="pi"><div class="mono">A—0001 · ${p.cat}</div><h1>${p.n}</h1><div class="mono">${fmt(p.pr)} · demo price</div>
+pl.innerHTML=`<div class="pi"><div class="mono">A—0001 · ${p.cat}</div><h1>${p.n}</h1><div class="mono">${fmt(p.pr)}</div>
 <div class="row"><span class="mono">Colour — <b>${C[k][0]}</b> · SKU A0001-${p.id}-${k.toUpperCase()}</span><div class="sw" id="sw"></div></div>
 <div class="row"><span class="mono">View</span><div class="seg"><button aria-pressed="${S.side=='front'}" data-v="front">Front</button><button aria-pressed="${S.side=='back'}" data-v="back">Back</button></div></div>
 <div class="row"><span class="mono">Size</span><div class="sz" id="sz"></div><div class="mono" id="av" style="margin-top:8px;opacity:.7"></div></div>
@@ -193,7 +185,7 @@ pl.innerHTML=`<div class="pi"><div class="mono">A—0001 · ${p.cat}</div><h1>${
 <div class="dt lt"><div class="mono">Print detail<br>asset slot</div><div class="mono">Fabric detail<br>asset slot</div></div></div>`;
 const sw=$('#sw');p.cols.forEach(c=>{const kk=Array.isArray(c)?c[0]:c,b=mk('button');b.style.background=C[kk][1];b.setAttribute('aria-label',C[kk][0]);b.setAttribute('aria-pressed',kk==k);b.onclick=()=>{S.col[p.id]=kk;setImg(els[S.a],p,kk,S.side);panel()};sw.append(b)});
 const sz=$('#sz');p.sizes.forEach(z=>{const b=mk('button','',z),o=p.out.includes(z);b.disabled=o;b.setAttribute('aria-pressed',S.size==z);b.onclick=()=>{S.size=z;panel()};sz.append(b)});
-$('#av').textContent=p.out.length?'Sold out (demo): '+p.out.join(', '):'All sizes in stock (demo)';
+$('#av').textContent=p.out.length?'Sold out: '+p.out.join(', '):'';
 pl.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{S.side=b.dataset.v;setImg(els[S.a],p,k,S.side);panel()});
 $('#ad').onclick=()=>{if(!S.size)return toast('Оберіть розмір');add(p.id,k,S.size);toast('Added to bag')}}
 function toast(t){const e=$('#ts');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),1800)}
@@ -201,9 +193,9 @@ function save(){try{localStorage.setItem('after.cart',JSON.stringify(S.cart))}ca
 function add(id,k,z){const f=S.cart.find(c=>c.id==id&&c.k==k&&c.z==z);f?f.q++:S.cart.push({id,k,z,q:1});save();$('#dr').classList.add('on')}
 function cart(){const w=$('#ci');w.innerHTML='';let t=0;if(!S.cart.length)w.innerHTML='<p class="mono" style="margin-top:20px">Bag is empty</p>';
 S.cart.forEach((c,i)=>{const p=P.find(x=>x.id==c.id);t+=p.pr*c.q;const r=mk('div','ci',`<img alt=""><div><b>${p.n}</b><div class="mono">${C[c.k][0]} · ${c.z} · ${fmt(p.pr)}</div><div class="q"><button aria-label="−">−</button>${c.q}<button aria-label="+">+</button></div></div><button aria-label="Remove">✕</button>`);
-r.querySelector('img').src=svg(C[c.k][1],'front',p.z);const b=r.querySelectorAll('button');
+r.querySelector('img').src=src(p,c.k,'front');const b=r.querySelectorAll('button');
 b[0].onclick=()=>{c.q>1?c.q--:S.cart.splice(i,1);save()};b[1].onclick=()=>{c.q++;save()};b[2].onclick=()=>{S.cart.splice(i,1);save()};w.append(r)});
-$('#tot').innerHTML='<span class="mono">Total (demo)</span> <b>'+fmt(t)+'</b>'}
+$('#tot').innerHTML='<span class="mono">Total</span> <b>'+fmt(t)+'</b>'}
 $('#co').onclick=()=>{if(!S.cart.length)return $('#cn2').textContent='Кошик порожній';$('#of').style.display='flex';$('#co').style.display='none'};
 $('#of').onsubmit=async e=>{e.preventDefault();const f=Object.fromEntries(new FormData(e.target)),n=$('#cn2');if(f.site)return;
 const items=S.cart.map(c=>{const p=P.find(x=>x.id==c.id);return{name:p.n,sku:`A0001-${p.id}-${c.k.toUpperCase()}`,color:C[c.k][0],size:c.z,qty:c.q,price:p.pr}});
@@ -246,7 +238,7 @@ document.querySelectorAll('#ov a').forEach(a=>a.addEventListener('click',e=>{con
 $('#acc').onclick=()=>toast('Account — не реалізовано в демо');$('#srch').onclick=()=>{open(false);$('#shopall').scrollIntoView();setTimeout(()=>$('#fq').focus(),600)};
 // collections
 const cl=[['span 5','#DCE3ED',0,'Washed Black / Navy','4/5'],['span 4','#DED7E5',1,'Zip series','3/4'],['span 3','#D8DDD4',2,'Sage','2/3'],['span 7','#C6B8AC',3,'Ash Cacao','16/10'],['span 5','#F3F0EA',4,'Bone','4/3']];
-cl.forEach(([s,b,i,t,ar])=>{const f=mk('div','ph rv',`<span class="mono">${t} · photo slot</span><img alt="">`);f.style.cssText=`grid-column:${s};background:${b};aspect-ratio:${ar};${i%2?'margin-top:40px':''}`;const p=P[i];f.querySelector('img').src=svg(C[p.cols[0]][1],i%2?'back':'front',p.z);$('#colg').append(f)});
+cl.forEach(([s,b,i,t,ar])=>{const f=mk('div','ph rv',`<span class="mono">${t} · photo slot</span><img alt="">`);f.style.cssText=`grid-column:${s};background:${b};aspect-ratio:${ar};${i%2?'margin-top:40px':''}`;const p=P[i];f.querySelector('img').src=src(p,p.cols[0],i%2?'back':'front');$('#colg').append(f)});
 // shop
 const cats=[...new Set(P.map(p=>p.cat))],cols=[...new Set(P.flatMap(p=>p.cols))];
 cats.forEach(c=>$('#fc').append(new Option(c,c)));cols.forEach(c=>$('#fo').append(new Option(C[c][0],c)));P[0].sizes.forEach(z=>$('#fs').append(new Option(z,z)));
@@ -255,7 +247,7 @@ let l=P.filter(p=>(!q||p.n.toLowerCase().includes(q))&&(!c||p.cat==c)&&(!o||p.co
 if(r=='a')l.sort((a,b)=>a.pr-b.pr);if(r=='d')l.sort((a,b)=>b.pr-a.pr);if(r=='n')l.sort((a,b)=>a.n.localeCompare(b.n));
 const w=$('#shop');w.innerHTML=l.length?'':'<p class="mono">No results</p>';
 l.forEach(p=>{const k=o||p.cols[0],b=mk('button','',`<div class="ph" style="background:${p.bg}"><span class="mono">${p.cat}</span><img alt="${p.n}"></div><div style="margin-top:8px"><b>${p.n}</b> <span class="mono">${fmt(p.pr)}</span></div>`);
-b.querySelector('img').src=svg(C[k][1],'front',p.z);b.onclick=()=>{go(S.t+Math.round(wr(P.indexOf(p)-S.t)));S.col[p.id]=k;setImg(els[S.a],p,k,'front');scrollTo(0,0);setTimeout(()=>open(true),50)};w.append(b)})}
+b.querySelector('img').src=src(p,k,'front');b.onclick=()=>{go(S.t+Math.round(wr(P.indexOf(p)-S.t)));S.col[p.id]=k;setImg(els[S.a],p,k,'front');scrollTo(0,0);setTimeout(()=>open(true),50)};w.append(b)})}
 ['#fq','#fc','#fo','#fs','#fr'].forEach(s=>$(s).addEventListener('input',shop));
 // reveal
 const io=new IntersectionObserver(e=>e.forEach(x=>x.isIntersecting&&x.target.classList.add('in')),{threshold:.15});document.querySelectorAll('.rv').forEach(e=>io.observe(e));
