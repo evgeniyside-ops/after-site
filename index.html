@@ -86,7 +86,7 @@ section.s{padding:80px 16px}.look{margin:0 -16px}}
 @media(prefers-reduced-motion:reduce){*{transition-duration:.01s!important;scroll-behavior:auto!important}.rv{opacity:1;transform:none}.open .it .l{animation:none}}
 </style></head><body>
 <header><nav><button class="keep" id="menu" aria-expanded="false">Menu / Collections</button></nav>
-<a class="logo" href="#" style="color:inherit;text-decoration:none" aria-label="AFTER®">AFTER<sup>®</sup></a>
+<a class="logo" href="/" style="color:inherit;text-decoration:none" aria-label="AFTER®">AFTER<sup>®</sup></a>
 <nav><button id="srch">Search</button><button id="acc">Account</button><button class="keep" id="bag">Bag (<span id="cnt">0</span>)</button></nav></header>
 <div class="ov" id="ov"><nav><a href="#collections">Collections</a><a href="#lookbook">Lookbook</a><a href="#shopall">Shop all</a><a href="#about">About</a></nav></div>
 
@@ -149,12 +149,15 @@ const src=(p,k,side)=>{const a=p.img&&p.img[k];return(a&&(a[side]||a.front))||sv
 const fb=(img,p,k,side)=>img.onerror=()=>{img.onerror=null;img.src=svg(C[k][1],side,p.z)};
 const S={a:0,open:false,side:'front',col:{},size:null,cart:[]};
 try{S.cart=JSON.parse(localStorage.getItem('after.cart')||'[]').filter(c=>C[c.k]&&P.some(p=>p.id==c.id))}catch(e){}
-P.forEach(p=>S.col[p.id]=p.cols[0]);
+const DEF=['wb','bn','nv','sp','ms','ac'];
+P.forEach((p,i)=>{S.col[p.id]=p.cols.includes(DEF[i%6])?DEF[i%6]:p.cols[0]});S.side='back';
 const M=()=>innerWidth<=760,stage=$('#stage'),els=[];
-function setImg(el,p,k,side,instant){const[a,b]=el.querySelectorAll('.l');const cur=a.style.opacity!='0'?a:b,nx=cur==a?b:a;
-nx.src=src(p,k,side);fb(nx,p,k,side);nx.style.opacity=1;cur.style.opacity=0}
+function setImg(el,p,k,side){const[a,b]=el.querySelectorAll('.l'),cur=a.style.opacity!='0'?a:b,nx=cur==a?b:a,tok=el._t=(el._t||0)+1;
+fb(nx,p,k,side);nx.src=src(p,k,side);
+const sw=()=>{if(el._t!==tok)return;nx.style.opacity=1;cur.style.opacity=0};
+nx.decode?nx.decode().then(sw,sw):sw();if(S.open)setTimeout(()=>sync(0))}
 P.forEach((p,i)=>{const el=mk('div','it','<img class="l" alt=""><img class="l" alt="" style="opacity:0">');el.setAttribute('role','button');el.tabIndex=-1;el.setAttribute('aria-label',p.n);
-el.querySelector('.l').src=src(p,S.col[p.id],'front');el.querySelector('.l').alt=p.n;stage.append(el);els.push(el)});
+el.querySelector('.l').src=src(p,S.col[p.id],'back');el.querySelector('.l').alt=p.n;stage.append(el);els.push(el)});
 // КРУГОВА КАРУСЕЛЬ: речі їдуть по еліпсу, t — ціль (ціле), pos — поточна позиція (пружина), o — розкриття картки (0..1)
 const RM=matchMedia('(prefers-reduced-motion:reduce)').matches,mod=(n,m)=>((n%m)+m)%m,wr=d=>mod(d+P.length/2,P.length)-P.length/2;
 Object.assign(S,{t:0,pos:0,vel:0,o:0,ot:0,drag:false,sh:-1});let run=0;
@@ -170,8 +173,28 @@ $('#ix').textContent=String(ra+1).padStart(2,'0')+' / '+String(N).padStart(2,'0'
 function tick(){if(RM){S.pos=S.t;S.o=S.ot}else{if(!S.drag){S.vel=(S.vel+(S.t-S.pos)*.035)*.82;S.pos+=S.vel}S.o+=(S.ot-S.o)*.09;if(Math.abs(S.ot-S.o)<.002)S.o=S.ot}
 draw();if(S.drag||Math.abs(S.t-S.pos)>.001||Math.abs(S.vel)>.001||S.o!=S.ot)requestAnimationFrame(tick);else run=0}
 function render(){if(!run){run=1;requestAnimationFrame(tick)}}
-function go(n){S.t=n;S.a=mod(n,P.length);S.side='front';S.size=null;if(S.open)panel();render()}
-function open(v){S.open=v;S.ot=v?1:0;$('#hero').classList.toggle('open',v);document.body.classList.toggle('lock',v);if(v){scrollTo(0,0);panel()}render()}
+function go(n){const pv=S.a;if(S.open&&S.side!='back')setImg(els[pv],P[pv],S.col[P[pv].id],'back');
+S.t=n;S.a=mod(n,P.length);S.side='back';S.size=null;if(S.open){pre(P[S.a]);panel();setTimeout(()=>sync(0))}render()}
+function open(v){S.open=v;S.ot=v?1:0;$('#hero').classList.toggle('open',v);document.body.classList.toggle('lock',v);const p=P[S.a];
+if(v){scrollTo(0,0);pre(p);panel();sync(1)}
+else{if(S.side!='back'){S.side='back';setImg(els[S.a],p,S.col[p.id],'back')}
+if(!ul){if(history.state&&history.state.p){ul=1;history.back();setTimeout(()=>{ul=0},400)}else sync(0)}}
+document.title=v?p.n+' — AFTER®':'AFTER® — MORE TO COME';render();lab()}
+// ПОСИЛАННЯ: /p/<id>?c=<колір>&v=front — кожен товар має власну адресу
+let ul=0;
+const pre=p=>{if(p._pre)return;p._pre=1;p.cols.forEach(k=>['front','back'].forEach(sd=>{new Image().src=src(p,k,sd)}))};
+function sync(push){if(ul)return;const p=P[S.a],u=S.open?'/p/'+p.id+'?c='+S.col[p.id]+(S.side=='front'?'&v=front':''):'/';
+if(location.pathname+location.search===u)return;push?history.pushState({p:1},'',u):history.replaceState(S.open?{p:1}:null,'',u)}
+function applyURL(init){ul=1;const m=location.pathname.match(/^\/p\/([^/]+)/),i=m?P.findIndex(p=>p.id==m[1]):-1;
+if(i>=0){const q=new URLSearchParams(location.search),c=q.get('c'),p=P[i];if(c&&p.cols.includes(c))S.col[p.id]=c;
+go(S.t+Math.round(wr(i-S.t)));S.side=q.get('v')=='front'?'front':'back';setImg(els[i],p,S.col[p.id],S.side);open(true);if(init){S.pos=S.t;S.o=1}}
+else if(S.open)open(false);ul=0}
+addEventListener('popstate',()=>applyURL(0));
+// МЕНЮ: назва залежить від блоку
+const SEC=[['hero','Showroom'],['collections','Collections'],['lookbook','Lookbook'],['shopall','Shop all'],['about','About']];let lq=0;
+function lab(){const y=innerHeight*.35;let n='Showroom';for(const[id,t]of SEC){const e=document.getElementById(id);if(e&&e.getBoundingClientRect().top<=y)n=t}
+const m=$('#menu'),t='Menu / '+n;if(m.textContent!==t)m.textContent=t}
+addEventListener('scroll',()=>{if(!lq){lq=1;requestAnimationFrame(()=>{lq=0;lab()})}},{passive:true});
 const fmt=n=>n+' ₴';
 function panel(){const p=P[S.a],k=S.col[p.id],pl=$('#panel');pl.style.setProperty('--pb',p.bg);
 pl.innerHTML=`<div class="pi"><div class="mono">A—0001 · ${p.cat}</div><h1>${p.n}</h1><div class="mono">${fmt(p.pr)}</div>
@@ -182,7 +205,7 @@ pl.innerHTML=`<div class="pi"><div class="mono">A—0001 · ${p.cat}</div><h1>${
 <div class="row lt"><details open><summary class="mono">Description</summary><p>Опис — слот. Реальні характеристики буде додано з каталогу.</p></details>
 <details><summary class="mono">Composition</summary><p>Склад — не вказано (TBD).</p></details>
 <details><summary class="mono">Size guide</summary><table><tr><td>Size</td><td>Chest</td><td>Length</td></tr><tr><td>XS–XXL</td><td>—</td><td>—</td></tr></table><p>Розмірну сітку буде додано.</p></details></div>
-<div class="dt lt"><div class="mono">Print detail<br>asset slot</div><div class="mono">Fabric detail<br>asset slot</div></div></div>`;
+<button class="mono" id="cp" style="margin-top:14px;text-decoration:underline">Copy link</button><div class="dt lt"><div class="mono">Print detail<br>asset slot</div><div class="mono">Fabric detail<br>asset slot</div></div></div>`;
 const sw=$('#sw');p.cols.forEach(c=>{const kk=Array.isArray(c)?c[0]:c,b=mk('button');b.style.background=C[kk][1];b.setAttribute('aria-label',C[kk][0]);b.setAttribute('aria-pressed',kk==k);b.onclick=()=>{S.col[p.id]=kk;setImg(els[S.a],p,kk,S.side);panel()};sw.append(b)});
 const sz=$('#sz');p.sizes.forEach(z=>{const b=mk('button','',z),o=p.out.includes(z);b.disabled=o;b.setAttribute('aria-pressed',S.size==z);b.onclick=()=>{S.size=z;panel()};sz.append(b)});
 $('#av').textContent=p.out.length?'Sold out: '+p.out.join(', '):'';
@@ -237,19 +260,27 @@ $('#menu').onclick=()=>{const o=$('#ov').classList.toggle('on');$('#menu').setAt
 document.querySelectorAll('#ov a').forEach(a=>a.addEventListener('click',e=>{const wasOpen=S.open;if(wasOpen)open(false);if(wasOpen&&a.hash=='#collections'){e.preventDefault();scrollTo({top:0,behavior:RM?'auto':'smooth'})}}));
 $('#acc').onclick=()=>toast('Account — не реалізовано в демо');$('#srch').onclick=()=>{open(false);$('#shopall').scrollIntoView();setTimeout(()=>$('#fq').focus(),600)};
 // collections
-const cl=[['span 5','#DCE3ED',0,'Washed Black / Navy','4/5'],['span 4','#DED7E5',1,'Zip series','3/4'],['span 3','#D8DDD4',2,'Sage','2/3'],['span 7','#C6B8AC',3,'Ash Cacao','16/10'],['span 5','#F3F0EA',4,'Bone','4/3']];
-cl.forEach(([s,b,i,t,ar])=>{const f=mk('div','ph rv',`<span class="mono">${t} · photo slot</span><img alt="">`);f.style.cssText=`grid-column:${s};background:${b};aspect-ratio:${ar};${i%2?'margin-top:40px':''}`;const p=P[i];f.querySelector('img').src=src(p,p.cols[0],i%2?'back':'front');$('#colg').append(f)});
+const cl=[['span 5','#DCE3ED','Washed Black / Navy','4/5',[['halo-trace-hoodie','wb','front'],['halo-trace-hoodie','nv','back']]],
+['span 4','#DED7E5','Zip series','3/4',[['ritual-type-zip','bn','front'],['fragment-fields-zip','bn','back']]],
+['span 3','#D8DDD4','Mineral Sage','2/3',[['ritual-type-hoodie','ms','back'],['blur-memory-zip','ms','front']]],
+['span 7','#C6B8AC','Ash Cacao','16/10',[['fragment-fields-hoodie','ac','back'],['ritual-zip','ac','front']]],
+['span 5','#F3F0EA','Bone / Soft Pink','4/3',[['blur-memory-hoodie','bn','back'],['halo-trace-hoodie','sp','front']]]];
+cl.forEach(([sp,bg,t,ar,im],n)=>{const f=mk('div','ph rv',`<span class="mono">${t}</span>`);f.style.cssText=`grid-column:${sp};background:${bg};aspect-ratio:${ar};${n%2?'margin-top:40px':''}`;
+im.forEach(([id,k,sd],j)=>{const p=P.find(x=>x.id==id);if(!p||!p.cols.includes(k))return;const i=mk('img');i.alt=p.n;i.src=src(p,k,sd);i.style.cssText=`inset:auto;top:${j?14:10}%;${j?'right':'left'}:3%;width:64%;height:80%;z-index:${j}`;f.append(i)});$('#colg').append(f)});
 // shop
 const cats=[...new Set(P.map(p=>p.cat))],cols=[...new Set(P.flatMap(p=>p.cols))];
 cats.forEach(c=>$('#fc').append(new Option(c,c)));cols.forEach(c=>$('#fo').append(new Option(C[c][0],c)));P[0].sizes.forEach(z=>$('#fs').append(new Option(z,z)));
+const SCO=['ac','sp','nv','ms','bn','wb'];const shopCol=p=>{const c=SCO[(P.indexOf(p)*5+1)%6];return p.cols.includes(c)?c:p.cols[0]};
 function shop(){const q=$('#fq').value.toLowerCase(),c=$('#fc').value,o=$('#fo').value,z=$('#fs').value,r=$('#fr').value;
 let l=P.filter(p=>(!q||p.n.toLowerCase().includes(q))&&(!c||p.cat==c)&&(!o||p.cols.includes(o))&&(!z||!p.out.includes(z)));
 if(r=='a')l.sort((a,b)=>a.pr-b.pr);if(r=='d')l.sort((a,b)=>b.pr-a.pr);if(r=='n')l.sort((a,b)=>a.n.localeCompare(b.n));
 const w=$('#shop');w.innerHTML=l.length?'':'<p class="mono">No results</p>';
-l.forEach(p=>{const k=o||p.cols[0],b=mk('button','',`<div class="ph" style="background:${p.bg}"><span class="mono">${p.cat}</span><img alt="${p.n}"></div><div style="margin-top:8px"><b>${p.n}</b> <span class="mono">${fmt(p.pr)}</span></div>`);
-b.querySelector('img').src=src(p,k,'front');b.onclick=()=>{go(S.t+Math.round(wr(P.indexOf(p)-S.t)));S.col[p.id]=k;setImg(els[S.a],p,k,'front');scrollTo(0,0);setTimeout(()=>open(true),50)};w.append(b)})}
+l.forEach(p=>{const k=o||shopCol(p),b=mk('button','',`<div class="ph" style="background:${p.bg}"><span class="mono">${p.cat}</span><img alt="${p.n}"></div><div style="margin-top:8px"><b>${p.n}</b> <span class="mono">${fmt(p.pr)}</span></div>`);
+b.querySelector('img').src=src(p,k,'back');b.onclick=()=>{go(S.t+Math.round(wr(P.indexOf(p)-S.t)));S.col[p.id]=k;setImg(els[S.a],p,k,'back');scrollTo(0,0);setTimeout(()=>open(true),50)};w.append(b)})}
 ['#fq','#fc','#fo','#fs','#fr'].forEach(s=>$(s).addEventListener('input',shop));
 // reveal
 const io=new IntersectionObserver(e=>e.forEach(x=>x.isIntersecting&&x.target.classList.add('in')),{threshold:.15});document.querySelectorAll('.rv').forEach(e=>io.observe(e));
-render();shop();save();
+const lg=document.querySelector('.logo');lg.addEventListener('click',e=>{e.preventDefault();if(S.open)open(false);scrollTo({top:0,behavior:RM?'auto':'smooth'})});
+$('#panel').addEventListener('click',e=>{if(e.target.id=='cp'){try{navigator.clipboard.writeText(location.href)}catch(x){}toast('Link copied')}});
+lab();applyURL(1);render();shop();save();
 </script></body></html>
