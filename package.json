@@ -1,0 +1,23 @@
+{
+  "name": "primary",
+  "version": "1.0.0",
+  "description": "index.html — сайт, api/order.js — прийом замовлень у Telegram, img/ — ваші фото. 1. @BotFather в Telegram → /newbot → отримайте TG_TOKEN. Напишіть боту будь-яке повідомлення. 2. Відкрийте https://api.telegram.org/bot<TG_TOKEN>/getUpdates → знайдіть chat.id → це TG_CHAT_ID. 3. Завантажте папку в GitHub, імпортуйте у Vercel, додайте TG_TOKEN і TG_CHAT_ID в Environment Variables, Deploy. 4. Підключіть домен: Vercel → Settings → Domains. Токен бота нікому не показуйте і не вставляйте в index.html.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/evgeniyside-ops/after-site.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/evgeniyside-ops/after-site/issues"
+  },
+  "homepage": "https://github.com/evgeniyside-ops/after-site#readme",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}
