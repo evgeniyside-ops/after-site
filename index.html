@@ -304,4 +304,9 @@ const io=new IntersectionObserver(e=>e.forEach(x=>x.isIntersecting&&x.target.cla
 const lg=document.querySelector('.logo');lg.addEventListener('click',e=>{e.preventDefault();if(S.open)open(false);scrollTo({top:0,behavior:RM?'auto':'smooth'})});
 $('#panel').addEventListener('click',e=>{if(e.target.id=='cp'){try{navigator.clipboard.writeText(location.href)}catch(x){}toast('Посилання скопійовано')}});
 lab();applyURL(1);render();shop();save();
-</script></body></html>
+</script>
+<script>
+window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body></html>
