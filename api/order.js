@@ -12,7 +12,8 @@ module.exports = async (req, res) => {
     `• ${clean(i.name)} | ${clean(i.color)} | ${clean(i.size, 10)} × ${Number(i.qty) || 1} — ${Number(i.price) || 0} ₴`);
   const total = b.items.reduce((s, i) => s + (Number(i.price) || 0) * (Number(i.qty) || 1), 0);
   const text = `🧥 Нове замовлення AFTER®\n\n${name}\n${phone}\n${city}\nНП: ${np}\n` +
-    (note ? `Коментар: ${note}\n` : '') + `\n${lines.join('\n')}\n\nРазом: ${total} ₴ (ціни надійшли з сайту — перевірте)`;
+    (note ? `Коментар: ${note}\n` : '') +
+    (clean(b.utm, 300) ? `UTM: ${clean(b.utm, 300)}\n` : '') + `\n${lines.join('\n')}\n\nРазом: ${total} ₴ (ціни надійшли з сайту — перевірте)`;
   try {
     const r = await fetch(`https://api.telegram.org/bot${process.env.TG_TOKEN}/sendMessage`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },

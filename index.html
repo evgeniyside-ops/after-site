@@ -101,7 +101,13 @@ footer a{color:inherit}
 @media(max-width:760px){.lbw{margin:24px -16px 0}.lbt{font-size:clamp(56px,24vw,140px)}}
 .tag{transition:opacity .4s}.open .tag{opacity:0}
 @media(min-width:761px){.nav2{right:auto;left:30vw;transform:translateX(-50%)}}
-</style></head><body>
+</style>
+<script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};
+const PIXEL_ID='';/* встав ID Meta Pixel сюди */
+const track=(n,d,fb,fd)=>{try{va('event',{name:n,data:d})}catch(e){}try{window.fbq&&fb&&fbq('track',fb,fd||{})}catch(e){}};
+if(PIXEL_ID){!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init',PIXEL_ID);fbq('track','PageView')}</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</head><body>
 <header><nav><button class="keep" id="menu" aria-expanded="false">Menu / Collections</button></nav>
 <a class="logo" href="/" style="color:inherit;text-decoration:none" aria-label="AFTER®">AFTER<sup>®</sup></a>
 <nav><button id="srch">Search</button><button id="acc">About</button><button class="keep" id="bag">Bag (<span id="cnt">0</span>)</button></nav></header>
@@ -234,16 +240,16 @@ pl.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{S.side=b.dataset.v;set
 $('#ad').onclick=()=>{if(!S.size)return toast('Оберіть розмір');add(p.id,k,S.size);toast('Додано до кошика')}}
 function toast(t){const e=$('#ts');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),1800)}
 function save(){try{localStorage.setItem('after.cart',JSON.stringify(S.cart))}catch(e){}$('#cnt').textContent=S.cart.reduce((a,c)=>a+c.q,0);cart()}
-function add(id,k,z){const f=S.cart.find(c=>c.id==id&&c.k==k&&c.z==z);f?f.q++:S.cart.push({id,k,z,q:1});save();$('#dr').classList.add('on')}
+function add(id,k,z){const f=S.cart.find(c=>c.id==id&&c.k==k&&c.z==z);f?f.q++:S.cart.push({id,k,z,q:1});track('add_to_cart',{id:String(id)},'AddToCart');save();$('#dr').classList.add('on')}
 function cart(){const w=$('#ci');w.innerHTML='';let t=0;if(!S.cart.length)w.innerHTML='<p class="mono" style="margin-top:20px">Кошик порожній</p>';
 S.cart.forEach((c,i)=>{const p=P.find(x=>x.id==c.id);t+=p.pr*c.q;const r=mk('div','ci',`<img alt=""><div><b>${p.n}</b><div class="mono">${C[c.k][0]} · ${c.z} · ${fmt(p.pr)}</div><div class="q"><button aria-label="−">−</button>${c.q}<button aria-label="+">+</button></div></div><button aria-label="Remove">✕</button>`);
 r.querySelector('img').src=src(p,c.k,'front');const b=r.querySelectorAll('button');
 b[0].onclick=()=>{c.q>1?c.q--:S.cart.splice(i,1);save()};b[1].onclick=()=>{c.q++;save()};b[2].onclick=()=>{S.cart.splice(i,1);save()};w.append(r)});
 $('#tot').innerHTML='<span class="mono">Total</span> <b>'+fmt(t)+'</b>'}
-$('#co').onclick=()=>{if(!S.cart.length)return $('#cn2').textContent='Кошик порожній';$('#of').style.display='flex';$('#co').style.display='none'};
+$('#co').onclick=()=>{if(!S.cart.length)return $('#cn2').textContent='Кошик порожній';$('#of').style.display='flex';$('#co').style.display='none';track('begin_checkout',undefined,'InitiateCheckout')};
 $('#of').onsubmit=async e=>{e.preventDefault();const f=Object.fromEntries(new FormData(e.target)),n=$('#cn2');if(f.site)return;
 const items=S.cart.map(c=>{const p=P.find(x=>x.id==c.id);return{name:p.n,sku:`A0001-${p.id}-${c.k.toUpperCase()}`,color:C[c.k][0],size:c.z,qty:c.q,price:p.pr}});
-n.textContent='Надсилаємо…';try{const r=await fetch('/api/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...f,items})});if(!r.ok)throw 0;S.cart=[];save();e.target.reset();e.target.style.display='none';$('#co').style.display='';n.textContent='Замовлення прийнято. Ми зв’яжемося з вами для підтвердження. Оплата на цьому кроці не списується.'}catch(x){n.textContent='Не вдалося надіслати замовлення: сервер замовлень не під’єднано або помилка мережі.'}};
+n.textContent='Надсилаємо…';try{const r=await fetch('/api/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...f,items,utm:location.search})});if(!r.ok)throw 0;{const tv=items.reduce((a,i)=>a+(Number(i.price)||0)*(Number(i.qty)||1),0);track('order',{value:tv},'Lead',{value:tv,currency:'UAH'})}S.cart=[];save();e.target.reset();e.target.style.display='none';$('#co').style.display='';n.textContent='Замовлення прийнято. Ми зв’яжемося з вами для підтвердження. Оплата на цьому кроці не списується.'}catch(x){n.textContent='Не вдалося надіслати замовлення: сервер замовлень не під’єднано або помилка мережі.'}};
 const NP=(c,p)=>fetch('https://api.novaposhta.ua/v2.0/json/',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({apiKey:'',modelName:'AddressGeneral',calledMethod:c,methodProperties:p})}).then(r=>r.json()).then(j=>j.success?j.data:[]).catch(()=>null);
 const escH=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function ac(inp,list,load,pick,allowEmpty){let t,seq=0,items=[],idx=-1;
