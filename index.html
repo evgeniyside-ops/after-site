@@ -103,6 +103,7 @@ footer a{color:inherit}
 @media(min-width:761px){.nav2{right:auto;left:30vw;transform:translateX(-50%)}}
 </style>
 <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};
+try{const q=location.search;if(/utm_|fbclid|ttclid/.test(q))localStorage.setItem('after.utm',q)}catch(e){}
 const PIXEL_ID='';/* встав ID Meta Pixel сюди */
 const track=(n,d,fb,fd)=>{try{va('event',{name:n,data:d})}catch(e){}try{window.fbq&&fb&&fbq('track',fb,fd||{})}catch(e){}};
 if(PIXEL_ID){!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init',PIXEL_ID);fbq('track','PageView')}</script>
@@ -249,7 +250,7 @@ $('#tot').innerHTML='<span class="mono">Total</span> <b>'+fmt(t)+'</b>'}
 $('#co').onclick=()=>{if(!S.cart.length)return $('#cn2').textContent='Кошик порожній';$('#of').style.display='flex';$('#co').style.display='none';track('begin_checkout',undefined,'InitiateCheckout')};
 $('#of').onsubmit=async e=>{e.preventDefault();const f=Object.fromEntries(new FormData(e.target)),n=$('#cn2');if(f.site)return;
 const items=S.cart.map(c=>{const p=P.find(x=>x.id==c.id);return{name:p.n,sku:`A0001-${p.id}-${c.k.toUpperCase()}`,color:C[c.k][0],size:c.z,qty:c.q,price:p.pr}});
-n.textContent='Надсилаємо…';try{const r=await fetch('/api/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...f,items,utm:location.search})});if(!r.ok)throw 0;{const tv=items.reduce((a,i)=>a+(Number(i.price)||0)*(Number(i.qty)||1),0);track('order',{value:tv},'Lead',{value:tv,currency:'UAH'})}S.cart=[];save();e.target.reset();e.target.style.display='none';$('#co').style.display='';n.textContent='Замовлення прийнято. Ми зв’яжемося з вами для підтвердження. Оплата на цьому кроці не списується.'}catch(x){n.textContent='Не вдалося надіслати замовлення: сервер замовлень не під’єднано або помилка мережі.'}};
+n.textContent='Надсилаємо…';try{const r=await fetch('/api/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...f,items,utm:(()=>{try{return localStorage.getItem('after.utm')||location.search}catch(e){return location.search}})()})});if(!r.ok)throw 0;{const tv=items.reduce((a,i)=>a+(Number(i.price)||0)*(Number(i.qty)||1),0);track('order',{value:tv},'Lead',{value:tv,currency:'UAH'})}S.cart=[];save();e.target.reset();e.target.style.display='none';$('#co').style.display='';n.textContent='Замовлення прийнято. Ми зв’яжемося з вами для підтвердження. Оплата на цьому кроці не списується.'}catch(x){n.textContent='Не вдалося надіслати замовлення: сервер замовлень не під’єднано або помилка мережі.'}};
 const NP=(c,p)=>fetch('https://api.novaposhta.ua/v2.0/json/',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({apiKey:'',modelName:'AddressGeneral',calledMethod:c,methodProperties:p})}).then(r=>r.json()).then(j=>j.success?j.data:[]).catch(()=>null);
 const escH=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function ac(inp,list,load,pick,allowEmpty){let t,seq=0,items=[],idx=-1;
