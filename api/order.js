@@ -3,6 +3,12 @@
 module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).end();
   const b = req.body || {};
+  // Бот (AI-менеджер) надсилає товари простим текстом: "назва | колір | розмір | к-сть | ціна; ..."
+  const parseItemsText = (t) => String(t || '').split(/;|\n/).map(s => s.trim()).filter(Boolean).map(s => {
+    const [name = '', color = '', size = '', qty = '1', price = '0'] = s.split('|').map(x => x.trim());
+    return { name, color, size, qty: Number(qty) || 1, price: Number(String(price).replace(/[^\d.]/g, '')) || 0 };
+  });
+  if (!Array.isArray(b.items) && b.items_text) b.items = parseItemsText(b.items_text);
   const clean = (v, n = 200) => String(v ?? '').slice(0, n).trim();
   const name = clean(b.name), phone = clean(b.phone, 30), city = clean(b.city),
         np = clean(b.np, 250), note = clean(b.note, 500);
@@ -12,8 +18,7 @@ module.exports = async (req, res) => {
     `• ${clean(i.name)} | ${clean(i.color)} | ${clean(i.size, 10)} × ${Number(i.qty) || 1} — ${Number(i.price) || 0} ₴`);
   const total = b.items.reduce((s, i) => s + (Number(i.price) || 0) * (Number(i.qty) || 1), 0);
   const text = `🧥 Нове замовлення AFTER®\n\n${name}\n${phone}\n${city}\nНП: ${np}\n` +
-    (note ? `Коментар: ${note}\n` : '') +
-    (clean(b.utm, 300) ? `UTM: ${clean(b.utm, 300)}\n` : '') + `\n${lines.join('\n')}\n\nРазом: ${total} ₴ (ціни надійшли з сайту — перевірте)`;
+    (note ? `Коментар: ${note}\n` : '') + `\n${lines.join('\n')}\n\nРазом: ${total} ₴ (ціни надійшли з сайту — перевірте)`;
   try {
     const r = await fetch(`https://api.telegram.org/bot${process.env.TG_TOKEN}/sendMessage`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
